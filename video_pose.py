@@ -44,6 +44,7 @@ def video2poseframe(video_name):
     import matplotlib.pyplot as plt
 
     from PIL import Image, ImageDraw
+
     import random
 
     cfg = load_config("demo/pose_cfg_multi.yaml")
@@ -146,7 +147,9 @@ def video2posevideo(video_name):
 
     import matplotlib.pyplot as plt
 
-    from PIL import Image, ImageDraw
+    from PIL import Image, ImageDraw, ImageFont
+    font = ImageFont.truetype("./font/NotoSans-Bold.ttf", 16)
+
     import random
 
     cfg = load_config("demo/pose_cfg_multi.yaml")
@@ -224,6 +227,8 @@ def video2posevideo(video_name):
                 people_real_num = people_real_num + 1
                 for point_i in range(0, point_num):
                     draw.ellipse((person_conf_multi[people_i][point_i][0] - point_r, person_conf_multi[people_i][point_i][1] - point_r, person_conf_multi[people_i][point_i][0] + point_r, person_conf_multi[people_i][point_i][1] + point_r), fill=point_color)
+
+        draw.text((0, 0), people_real_num, (255,255,255), font=font)
 
         print('people_real_num: ')
         print(people_real_num)
