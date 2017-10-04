@@ -228,7 +228,9 @@ def video2posevideo(video_name):
         print('people_real_num: ')
         print(people_real_num)
 
-        pose_frame_list.append(image_img)
+        image_img_numpy = np.asarray(image_img)
 
-    video_pose = ImageSequenceClip(pose_frame_list, fps = video.fps)
-    video_pose.write_videofile("testset/" + video_name + "_pose.mov", fps = video.fps)
+        pose_frame_list.append(image_img_numpy)
+
+    video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
+    video_pose.write_videofile("testset/" + video_name + "_pose.mp4", fps=video.fps)
