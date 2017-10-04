@@ -40,15 +40,33 @@ $ docker run jgravity/tf-opencv-jupyter:pose-video
 
 #### Convert video frames to images
 ```
-# python -c 'from video_pose import *; frame2image("{video_file_name}")'
+# python -c 'from video_pose import *; video2frame("{video_file_name}")'
 ```
 > ex. testset/test_video_01.mov -> test_video_01
+```
+# python -c 'import time; start_time = time.clock(); from video_pose import *; video2frame("{video_file_name}"); print("Time(s): " + str(time.clock() - start_time))'
+```
+> With stopwatch
 
 #### Convert video frames to images with pose
 ```
-# python -c 'from video_pose import *; frame2pose("{video_file_name}")'
+# python -c 'from video_pose import *; video2poseframe("{video_file_name}")'
 ```
 > ex. testset/test_video_01.mov -> test_video_01
+```
+# python -c 'import time; start_time = time.clock(); from video_pose import *; video2poseframe("{video_file_name}"); print("Time(s): " + str(time.clock() - start_time))'
+```
+> With stopwatch
+
+#### Convert video to video with pose
+```
+# python -c 'from video_pose import *; video2posevideo("{video_file_name}")'
+```
+> ex. testset/test_video_01.mov -> test_video_01
+```
+# python -c 'import time; start_time = time.clock(); from video_pose import *; video2posevideo("{video_file_name}"); print("Time(s): " + str(time.clock() - start_time))'
+```
+> With stopwatch
 
 ## Environments
 
