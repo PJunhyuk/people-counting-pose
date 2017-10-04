@@ -212,6 +212,7 @@ def video2posevideo(video_name):
 
         point_i = 0 # index of points
         point_r = 5 # radius of points
+        point_min = 7 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
 
         people_real_num = 0
         for people_i in range(0, people_num):
@@ -223,7 +224,7 @@ def video2posevideo(video_name):
             for point_i in range(0, point_num):
                 if person_conf_multi[people_i][point_i][0] + person_conf_multi[people_i][point_i][1] != 0: # If coordinates of point is (0, 0) == meaningless data
                     point_count = point_count + 1
-            if point_count > 5: # If there are more than 5 point in person, we define he/she is REAL PERSON
+            if point_count > point_min:
                 people_real_num = people_real_num + 1
                 for point_i in range(0, point_num):
                     draw.ellipse((person_conf_multi[people_i][point_i][0] - point_r, person_conf_multi[people_i][point_i][1] - point_r, person_conf_multi[people_i][point_i][0] + point_r, person_conf_multi[people_i][point_i][1] + point_r), fill=point_color)
