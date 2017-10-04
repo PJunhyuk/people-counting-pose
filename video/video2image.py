@@ -1,13 +1,14 @@
-import numpy as np
-import cv2
+import sys
 
-## Read video from file
-video_input = cv2.VideoCapture('./testset/test_video_01.mov')
+import imageio
+from moviepy.editor import *
 
-## Check information of video_input
-print('video_input:', video_input)
-print('type(video_input):', type(video_input)))
+# Read video from file
+video_name = sys.argv[1] ## example: test_video_01
+video_name_input = 'testset/' + file_name + '.mov'
+video_input = VideoFileClip(file_name_input)
 
-# Release everything if job is finished
-video_input.release()
-cv2.destroyAllWindows()
+video_frame = video_input.duration * video_input.fps ## duration: second / fps: frame per second
+
+for i in range(0, video_frame):
+    video_input.save_frame('testset/' + video_name + '/frame_' + str(i) + '.jpg', i)
