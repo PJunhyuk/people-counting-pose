@@ -6,11 +6,14 @@ Based on [pose-tensorflow](https://github.com/eldar/pose-tensorflow)
 
 Install [Docker](https://docker.com) and [Kitematic](https://kitematic.com/)
 
-#### Installation / Setting
+#### Pull docker image
 ```
 $ docker pull jgravity/tf-opencv-jupyter:pose-video
 $ docker run jgravity/tf-opencv-jupyter:pose-video
+```
 
+#### Download/Install code
+```
 # git clone https://github.com/PJunhyuk/pose-tensorflow-video
 
 // If compile.sh permission ERROR
