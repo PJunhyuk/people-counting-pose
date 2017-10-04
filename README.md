@@ -32,6 +32,12 @@ $ docker run jgravity/tf-opencv-jupyter:pose-video
 # TF_CUDNN_USE_AUTOTUNE=0 python3 demo/demo_multiperson.py test_multi_00
 ```
 
+#### Convert video frames to images
+```
+# python 'video/frame2image.py' {video_file_name}
+```
+> ex. testset/test_video_01.mov -> test_video_01
+
 ## Environments
 
 Use Docker [jgravity/tf-opencv-jupyter](https://hub.docker.com/r/jgravity/tf-opencv-jupyter/),
