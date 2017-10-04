@@ -40,7 +40,13 @@ $ docker run jgravity/tf-opencv-jupyter:pose-video
 
 #### Convert video frames to images
 ```
-# python -c 'from video/frame2image.py import *; frame2image('{video_file_name}')'
+# python -c 'from video_pose import *; frame2image("{video_file_name}")'
+```
+> ex. testset/test_video_01.mov -> test_video_01
+
+#### Convert video frames to images with pose
+```
+# python -c 'from video_pose import *; frame2pose("{video_file_name}")'
 ```
 > ex. testset/test_video_01.mov -> test_video_01
 

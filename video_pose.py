@@ -18,7 +18,8 @@ def frame2image(video_name):
     video_frame_number = int(video.duration * video.fps) ## duration: second / fps: frame per second
     video_frame_ciphers = math.ceil(math.log(video_frame_number, 10)) ## ex. 720 -> 3
 
-    os.makedirs('testset/' + video_name)
+    if not os.path.exists('testset/' + video_name):
+        os.makedirs('testset/' + video_name)
 
     for i in range(0, video_frame_number):
         video.save_frame('testset/' + video_name + '/frame_' + str(i).zfill(video_frame_ciphers) + '.jpg', i)
@@ -59,6 +60,9 @@ def frame2pose(video_name):
     video = read_video(video_name)
 
     video_frame_number = int(video.duration * video.fps) ## duration: second / fps: frame per second
+
+    if not os.path.exists('testset/' + video_name):
+        os.makedirs('testset/' + video_name)
 
     for i in range(0, video_frame_number):
         image = video.get_frame(i)
@@ -120,6 +124,3 @@ def frame2pose(video_name):
 
         video_name_result = 'testset/' + video_name + '/frame_pose_' + str(i).zfill(video_frame_ciphers) + '.jpg'
         image_img.save(video_name_result, "PNG")
-
-# video_name = sys.argv[1] ## example: test_video_01
-# frame2pose(video_name)
