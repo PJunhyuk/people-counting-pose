@@ -121,5 +121,5 @@ def frame2pose(video_name):
         video_name_result = 'testset/' + video_name + '/frame_pose_' + str(i).zfill(video_frame_ciphers) + '.jpg'
         image_img.save(video_name_result, "PNG")
 
-video_name = sys.argv[1] ## example: test_video_01
-frame2pose(video_name)
+# video_name = sys.argv[1] ## example: test_video_01
+# frame2pose(video_name)

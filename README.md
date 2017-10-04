@@ -27,15 +27,20 @@ $ docker run jgravity/tf-opencv-jupyter:pose-video
 # cd -
 ```
 
+###### Shorter version
+```
+# chmod u+x compile.sh && ./compile.sh && cd models/coco && chmod u+x download_models.sh && ./download_models.sh && cd -
+```
+
 #### Multiperson pose detection in image
 ```
-# TF_CUDNN_USE_AUTOTUNE=0 python3 demo/demo_multiperson.py test_multi_00
+# TF_CUDNN_USE_AUTOTUNE=0 python3 demo/demo_multiperson.py {image_file_name}
 ```
 > ex. testset/test_multi_00.png -> test_multi_00
 
 #### Convert video frames to images
 ```
-# python 'video/frame2image.py' {video_file_name}
+# python -c 'from video/frame2image.py import *; frame2image('{video_file_name}')'
 ```
 > ex. testset/test_video_01.mov -> test_video_01
 
