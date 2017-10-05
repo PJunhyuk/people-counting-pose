@@ -178,6 +178,24 @@ def video2posevideo(video_name):
 
     pose_frame_list = []
 
+    point_r = 3 # radius of points
+    point_min = 10 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
+    part_min = 3 # threshold of parts - If there are more than part_min parts in person, we define he/she is REAL PERSON / part means head, arm and leg
+    point_num = 17 # There are 17 points in 1 person
+
+    def ellipse_set(person_conf_multi, people_i, point_i):
+        return (person_conf_multi[people_i][point_i][0] - point_r, person_conf_multi[people_i][point_i][1] - point_r, person_conf_multi[people_i][point_i][0] + point_r, person_conf_multi[people_i][point_i][1] + point_r)
+
+    def line_set(person_conf_multi, people_i, point_i, point_j):
+        return (person_conf_multi[people_i][point_i][0], person_conf_multi[people_i][point_i][1], person_conf_multi[people_i][point_j][0], person_conf_multi[people_i][point_j][1])
+
+    def draw_ellipse_and_line(draw, person_conf_multi, people_i, a, b, c, point_color):
+        draw.ellipse(ellipse_set(person_conf_multi, people_i, a), fill=point_color)
+        draw.ellipse(ellipse_set(person_conf_multi, people_i, b), fill=point_color)
+        draw.ellipse(ellipse_set(person_conf_multi, people_i, c), fill=point_color)
+        draw.line(line_set(person_conf_multi, people_i, a, b), fill=point_color, width=5)
+        draw.line(line_set(person_conf_multi, people_i, b, c), fill=point_color, width=5)
+
     for i in range(0, video_frame_number):
         image = video.get_frame(i/video.fps)
 
@@ -204,36 +222,52 @@ def video2posevideo(video_name):
         draw = ImageDraw.Draw(image_img)
 
         people_num = 0
-        point_num = 17
+        people_real_num = 0
+        people_part_num = 0
 
         people_num = person_conf_multi.size / (point_num * 2)
         people_num = int(people_num)
         print('people_num: ' + str(people_num))
 
-        point_i = 0 # index of points
-        point_r = 3 # radius of points
-        point_min = 10 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
-
-        people_real_num = 0
         for people_i in range(0, people_num):
             point_color_r = random.randrange(0, 256)
             point_color_g = random.randrange(0, 256)
             point_color_b = random.randrange(0, 256)
             point_color = (point_color_r, point_color_g, point_color_b, 255)
+            point_list = []
             point_count = 0
+            point_i = 0 # index of points
+            part_count = 0 # count of parts in THAT person
             for point_i in range(0, point_num):
                 if person_conf_multi[people_i][point_i][0] + person_conf_multi[people_i][point_i][1] != 0: # If coordinates of point is (0, 0) == meaningless data
                     point_count = point_count + 1
+                    point_list.append(point_i)
+            if (5 in point_list) and (7 in point_list) and (9 in point_list): # Draw left arm
+                draw_ellipse_and_line(draw, person_conf_multi, people_i, 5, 7, 9, point_color)
+                part_count = part_count + 1
+            if (6 in point_list) and (8 in point_list) and (10 in point_list): # Draw right arm
+                draw_ellipse_and_line(draw, person_conf_multi, people_i, 6, 8, 10, point_color)
+                part_count = part_count + 1
+            if (11 in point_list) and (13 in point_list) and (15 in point_list): # Draw left leg
+                draw_ellipse_and_line(draw, person_conf_multi, people_i, 11, 13, 15, point_color)
+                part_count = part_count + 1
+            if (12 in point_list) and (14 in point_list) and (16 in point_list): # Draw right leg
+                draw_ellipse_and_line(draw, person_conf_multi, people_i, 12, 14, 16, point_color)
+                part_count = part_count + 1
             if point_count >= point_min:
                 people_real_num = people_real_num + 1
-                for point_i in range(0, point_num):
-                    draw.ellipse((person_conf_multi[people_i][point_i][0] - point_r, person_conf_multi[people_i][point_i][1] - point_r, person_conf_multi[people_i][point_i][0] + point_r, person_conf_multi[people_i][point_i][1] + point_r), fill=point_color)
+                # for point_i in range(0, point_num):
+                #     draw.ellipse(ellipse_set(person_conf_multi, people_i, point_i), fill=point_color)
+            if part_count >= part_min:
+                people_part_num = people_part_num + 1
 
-        draw.text((0, 0), 'People_real_num: ' + str(people_real_num), (0,0,0), font=font)
-        draw.text((0, 32), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
-        draw.text((0, 64), 'Total time required: ' + str(round(time.clock() - time_start, 1)) + 'sec = ' + str(round((time.clock() - time_start) / 60, 1)) + 'min', (0,0,0))
+        draw.text((0, 0), 'People(by point): ' + str(people_real_num) + ' (threshold = ' + str(point_min) + ')', (0,0,0), font=font)
+        draw.text((0, 32), 'People(by line): ' + str(people_part_num) + ' (threshold = ' + str(part_min) + ')', (0,0,0), font=font)
+        draw.text((0, 64), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
+        draw.text((0, 96), 'Total time required: ' + str(round(time.clock() - time_start, 1)) + 'sec', (0,0,0))
 
         print('people_real_num: ' + str(people_real_num))
+        print('people_part_num: ' + str(people_part_num))
         print('frame: ' + str(i))
 
         image_img_numpy = np.asarray(image_img)
