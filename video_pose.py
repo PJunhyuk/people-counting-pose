@@ -231,7 +231,7 @@ def video2posevideo(video_name):
 
         draw.text((0, 0), 'People_real_num: ' + str(people_real_num), (0,0,0), font=font)
         draw.text((0, 32), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
-        draw.text((0, 64), 'Total time required: ' + str(round(time.clock() - time_start, 1)) + 'sec = ' + str(round((time.clock() - time_start) / 60), 1) + 'min', (0,0,0))
+        draw.text((0, 64), 'Total time required: ' + str(round(time.clock() - time_start, 1)) + 'sec = ' + str(round((time.clock() - time_start) / 60, 1)) + 'min', (0,0,0))
 
         print('people_real_num: ' + str(people_real_num))
         print('frame: ' + str(i))
