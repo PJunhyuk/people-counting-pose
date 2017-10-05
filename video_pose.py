@@ -211,9 +211,9 @@ def video2posevideo(video_name):
         unLab, pos_array, unary_array, pwidx_array, pw_array = eval_graph(sm, detections)
         person_conf_multi = get_person_conf_multicut(sm, unLab, unary_array, pos_array)
 
-        print('person_conf_multi: ')
-        print(type(person_conf_multi))
-        print(person_conf_multi)
+        # print('person_conf_multi: ')
+        # print(type(person_conf_multi))
+        # print(person_conf_multi)
 
         # Add library to save image
         image_img = Image.fromarray(image)

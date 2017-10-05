@@ -29,7 +29,7 @@ $ docker run jgravity/tf-opencv-jupyter:pose-video
 
 ###### Shorter version
 ```
-# chmod u+x compile.sh && ./compile.sh && cd models/coco && chmod u+x download_models.sh && ./download_models.sh && cd -
+# chmod u+x ./compile.sh && ./compile.sh && cd models/coco && chmod u+x download_models.sh && ./download_models.sh && cd -
 ```
 
 #### Multiperson pose detection in image
