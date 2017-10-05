@@ -63,10 +63,6 @@ $ docker run jgravity/tf-opencv-jupyter:pose-video
 # python -c 'from video_pose import *; video2posevideo("{video_file_name}")'
 ```
 > ex. testset/test_video_01.mov -> test_video_01
-```
-# python -c 'import time; start_time = time.clock(); from video_pose import *; video2posevideo("{video_file_name}"); print("Time(s): " + str(time.clock() - start_time))'
-```
-> With stopwatch
 
 ## Environments
 

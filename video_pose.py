@@ -56,8 +56,6 @@ def video2poseframe(video_name):
     sm = SpatialModel(cfg)
     sm.load()
 
-    draw_multi = PersonDraw()
-
     # Load and setup CNN part detector
     sess, inputs, outputs = predict.setup_pose_prediction(cfg)
 
@@ -210,12 +208,11 @@ def video2posevideo(video_name):
 
         people_num = person_conf_multi.size / (point_num * 2)
         people_num = int(people_num)
-        print('people_num: ')
-        print(people_num)
+        print('people_num: ' + str(people_num))
 
         point_i = 0 # index of points
         point_r = 3 # radius of points
-        point_min = 8 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
+        point_min = 10 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
 
         people_real_num = 0
         for people_i in range(0, people_num):
@@ -227,20 +224,17 @@ def video2posevideo(video_name):
             for point_i in range(0, point_num):
                 if person_conf_multi[people_i][point_i][0] + person_conf_multi[people_i][point_i][1] != 0: # If coordinates of point is (0, 0) == meaningless data
                     point_count = point_count + 1
-            if point_count > point_min:
+            if point_count >= point_min:
                 people_real_num = people_real_num + 1
                 for point_i in range(0, point_num):
                     draw.ellipse((person_conf_multi[people_i][point_i][0] - point_r, person_conf_multi[people_i][point_i][1] - point_r, person_conf_multi[people_i][point_i][0] + point_r, person_conf_multi[people_i][point_i][1] + point_r), fill=point_color)
 
         draw.text((0, 0), 'People_real_num: ' + str(people_real_num), (0,0,0), font=font)
         draw.text((0, 32), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
-        draw.text((0, 64), 'Time required(s): ' + str(time.clock() - time_start))
+        draw.text((0, 64), 'Total time required: ' + str(round(time.clock() - time_start, 1)) + 'sec = ' + str(round((time.clock() - time_start) / 60), 1) + 'min', (0,0,0))
 
-        print('people_real_num: ')
-        print(people_real_num)
-
-        print('frame: ')
-        print(i)
+        print('people_real_num: ' + str(people_real_num))
+        print('frame: ' + str(i))
 
         image_img_numpy = np.asarray(image_img)
 
