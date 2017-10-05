@@ -6,6 +6,8 @@ import math
 import imageio
 from moviepy.editor import *
 
+import time
+
 def read_video(video_name):
     # Read video from file
     video_name_input = 'testset/' + video_name + '.mov'
@@ -129,6 +131,8 @@ def video2poseframe(video_name):
 
 
 def video2posevideo(video_name):
+    time_start = time.clock()
+
     import numpy as np
 
     sys.path.append(os.path.dirname(__file__) + "/../")
@@ -203,8 +207,7 @@ def video2posevideo(video_name):
 
         people_num = 0
         point_num = 17
-        print('person_conf_multi.size: ')
-        print(person_conf_multi.size)
+
         people_num = person_conf_multi.size / (point_num * 2)
         people_num = int(people_num)
         print('people_num: ')
@@ -231,6 +234,7 @@ def video2posevideo(video_name):
 
         draw.text((0, 0), 'People_real_num: ' + str(people_real_num), (0,0,0), font=font)
         draw.text((0, 32), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
+        draw.text((0, 64), 'Time required(s): ' + str(time.clock() - time_start))
 
         print('people_real_num: ')
         print(people_real_num)
@@ -244,3 +248,5 @@ def video2posevideo(video_name):
 
     video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
     video_pose.write_videofile("testset/" + video_name + "_pose.mp4", fps=video.fps)
+
+    print("Time(s): " + str(time.clock() - time_start))
