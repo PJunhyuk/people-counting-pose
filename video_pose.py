@@ -238,10 +238,17 @@ def video2posevideo(video_name):
             point_count = 0
             point_i = 0 # index of points
             part_count = 0 # count of parts in THAT person
+
+            # To find rectangle which include that people - list of points x, y coordinates
+            people_x = []
+            people_y = []
+
             for point_i in range(0, point_num):
                 if person_conf_multi[people_i][point_i][0] + person_conf_multi[people_i][point_i][1] != 0: # If coordinates of point is (0, 0) == meaningless data
                     point_count = point_count + 1
                     point_list.append(point_i)
+
+            # Draw each parts
             if (5 in point_list) and (7 in point_list) and (9 in point_list): # Draw left arm
                 draw_ellipse_and_line(draw, person_conf_multi, people_i, 5, 7, 9, point_color)
                 part_count = part_count + 1
@@ -259,6 +266,12 @@ def video2posevideo(video_name):
                 for point_i in range(0, point_num):
                     if person_conf_multi[people_i][point_i][0] + person_conf_multi[people_i][point_i][1] != 0: # If coordinates of point is (0, 0) == meaningless data
                         draw.ellipse(ellipse_set(person_conf_multi, people_i, point_i), fill=point_color)
+                        people_x.append(person_conf_multi[people_i][point_i][0])
+                        people_y.append(person_conf_multi[people_i][point_i][1])
+
+            # Draw rectangle which include that people
+            draw.rectangle([min(people_x), min(people_y), max(people_x), max(people_y)], fill=point_color, width=5)
+
             if part_count >= part_min:
                 people_part_num = people_part_num + 1
 
