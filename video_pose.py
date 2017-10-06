@@ -256,8 +256,9 @@ def video2posevideo(video_name):
                 part_count = part_count + 1
             if point_count >= point_min:
                 people_real_num = people_real_num + 1
-                # for point_i in range(0, point_num):
-                #     draw.ellipse(ellipse_set(person_conf_multi, people_i, point_i), fill=point_color)
+                for point_i in range(0, point_num):
+                    if person_conf_multi[people_i][point_i][0] + person_conf_multi[people_i][point_i][1] != 0: # If coordinates of point is (0, 0) == meaningless data
+                        draw.ellipse(ellipse_set(person_conf_multi, people_i, point_i), fill=point_color)
             if part_count >= part_min:
                 people_part_num = people_part_num + 1
 
