@@ -270,7 +270,7 @@ def video2posevideo(video_name):
                         people_y.append(person_conf_multi[people_i][point_i][1])
 
             # Draw rectangle which include that people
-            draw.rectangle([min(people_x), min(people_y), max(people_x), max(people_y)], fill=point_color, width=5)
+            draw.rectangle([min(people_x), min(people_y), max(people_x), max(people_y)], fill=point_color, outline=5)
 
             if part_count >= part_min:
                 people_part_num = people_part_num + 1
