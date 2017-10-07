@@ -75,7 +75,17 @@ or install
 - jupyter 4.2.1
 - git 2.1.4
 - tensorflow 1.3.0
-- some pip3 packages(scipy, scikit-image, matplotlib, pyyaml, easydict, cython, munkres)
+- some pip packages
+  - scipy 0.19.1
+  - scikit-image 0.13.1
+  - matplotlib 2.0.2
+  - pyYAML 3.12
+  - easydict 1.7
+  - Cython 0.27.1
+  - munkres 1.0.12
+  - moviepy 0.2.3.2
+  - dlib 19.7.0
+  - imageio 2.1.2
 
 ## Reference
 
@@ -96,3 +106,7 @@ or install
         url = {http://arxiv.org/abs/1605.03170},
         author = {Eldar Insafutdinov and Leonid Pishchulin and Bjoern Andres and Mykhaylo Andriluka and Bernt Schiele}
     }
+
+### Code
+[pose-tensorflow](https://github.com/eldar/pose-tensorflow) - Human Pose estimation with TensorFlow framework  
+[object-tracker](https://github.com/bikz05/object-tracker) - Object Tracker written in Python using dlib and OpenCV
