@@ -8,6 +8,10 @@ from moviepy.editor import *
 
 import time
 
+# for object-tracker
+import dlib
+import cv2
+
 def read_video(video_name):
     # Read video from file
     video_name_input = 'testset/' + video_name + '.mov'
@@ -229,6 +233,9 @@ def video2posevideo(video_name):
         people_num = int(people_num)
         print('people_num: ' + str(people_num))
 
+        # for object-tracker
+        target_points = [] # format: [(minx, miny, maxx, maxy), (minx, miny, maxx, maxy) ... ]
+
         for people_i in range(0, people_num):
             point_color_r = random.randrange(0, 256)
             point_color_g = random.randrange(0, 256)
@@ -269,11 +276,31 @@ def video2posevideo(video_name):
                         people_x.append(person_conf_multi[people_i][point_i][0])
                         people_y.append(person_conf_multi[people_i][point_i][1])
                 # Draw rectangle which include that people
-                draw.rectangle([min(people_x), min(people_y), max(people_x), max(people_y)], fill=point_color, outline=5)
-
+                # draw.rectangle([min(people_x), min(people_y), max(people_x), max(people_y)], fill=point_color, outline=5)
+                target_points.append((min(people_x), min(people_y), max(people_x), max(people_y))
 
             if part_count >= part_min:
                 people_part_num = people_part_num + 1
+
+        ### object-tracker ###
+        if i = 0: # for frame 0. set tracker
+            # Initial co-ordinates of the object to be tracked
+            # Create the tracker object
+            tracker = [dlib.correlation_tracker() for _ in range(len(target_points))]
+            # Provide the tracker the initial position of the object
+            [tracker[i].start_track(img, dlib.rectangle(*rect)) for i, rect in enumerate(target_points)]
+
+        # Update the tracker
+        for k in range(len(tracker)):
+            tracker[k].update(image)
+            # Get the position of th object, draw a
+            # bounding box around it and display it.
+            rect = tracker[k].get_position()
+            pt1 = (int(rect.left()), int(rect.top()))
+            pt2 = (int(rect.right()), int(rect.bottom()))
+            draw.rectangle([min(people_x), min(people_y), max(people_x), max(people_y)], fill='red', outline=5)
+            # cv2.rectangle(image, pt1, pt2, (255, 255, 255), 3)
+            print "Object {} tracked at [{}, {}] \r".format(k, pt1, pt2)
 
         draw.text((0, 0), 'People(by point): ' + str(people_real_num) + ' (threshold = ' + str(point_min) + ')', (0,0,0), font=font)
         draw.text((0, 32), 'People(by line): ' + str(people_part_num) + ' (threshold = ' + str(part_min) + ')', (0,0,0), font=font)

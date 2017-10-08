@@ -75,7 +75,7 @@ or install
 - jupyter 4.2.1
 - git 2.1.4
 - tensorflow 1.3.0
-- some pip packages
+- pip packages
   - scipy 0.19.1
   - scikit-image 0.13.1
   - matplotlib 2.0.2
