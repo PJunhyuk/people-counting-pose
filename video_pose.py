@@ -277,18 +277,18 @@ def video2posevideo(video_name):
                         people_y.append(person_conf_multi[people_i][point_i][1])
                 # Draw rectangle which include that people
                 # draw.rectangle([min(people_x), min(people_y), max(people_x), max(people_y)], fill=point_color, outline=5)
-                target_points.append((min(people_x), min(people_y), max(people_x), max(people_y))
+                target_points.append((int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))))
 
             if part_count >= part_min:
                 people_part_num = people_part_num + 1
 
         ### object-tracker ###
-        if i = 0: # for frame 0. set tracker
+        if i == 0: # for frame 0. set tracker
             # Initial co-ordinates of the object to be tracked
             # Create the tracker object
             tracker = [dlib.correlation_tracker() for _ in range(len(target_points))]
             # Provide the tracker the initial position of the object
-            [tracker[i].start_track(img, dlib.rectangle(*rect)) for i, rect in enumerate(target_points)]
+            [tracker[i].start_track(image, dlib.rectangle(*rect)) for i, rect in enumerate(target_points)]
 
         # Update the tracker
         for k in range(len(tracker)):
@@ -298,9 +298,10 @@ def video2posevideo(video_name):
             rect = tracker[k].get_position()
             pt1 = (int(rect.left()), int(rect.top()))
             pt2 = (int(rect.right()), int(rect.bottom()))
-            draw.rectangle([min(people_x), min(people_y), max(people_x), max(people_y)], fill='red', outline=5)
+            draw.rectangle([rect.left(), rect.top(), rect.right(), rect.bottom()], fill='red', outline=5)
+            # draw.rectangle([min(people_x), min(people_y), max(people_x), max(people_y)], fill='red', outline=5)
             # cv2.rectangle(image, pt1, pt2, (255, 255, 255), 3)
-            print "Object {} tracked at [{}, {}] \r".format(k, pt1, pt2)
+            print('Object ' + str(k) + ' tracked at [' + str(pt1) + ', ' + str(pt2) + ']')
 
         draw.text((0, 0), 'People(by point): ' + str(people_real_num) + ' (threshold = ' + str(point_min) + ')', (0,0,0), font=font)
         draw.text((0, 32), 'People(by line): ' + str(people_part_num) + ' (threshold = ' + str(part_min) + ')', (0,0,0), font=font)
