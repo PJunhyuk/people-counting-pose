@@ -89,7 +89,7 @@ point_num = 17 # There are 17 points in 1 person
 target_points = [] # format: [(minx, miny, maxx, maxy), (minx, miny, maxx, maxy) ... ]
 tracker = []
 
-for i in range(40, video_frame_number):
+for i in range(0, video_frame_number):
     # Save i-th frame as image
     image = video.get_frame(i/video.fps)
 
