@@ -5,6 +5,7 @@ time_start = time.clock()
 
 import sys
 import os
+import argparse as ap
 
 import math
 
@@ -54,9 +55,17 @@ draw_multi = PersonDraw()
 # Load and setup CNN part detector
 sess, inputs, outputs = predict.setup_pose_prediction(cfg)
 
-################
+##########
 
-video = video_pose.read_video(video_name)
+parser = ap.ArgumentParser()
+group = parser.add_mutually_exclusive_group(required=True)
+group.add_argument('-v', "--videoFile", help="Path to Video File")
+args = vars(parser.parse_args())
+
+# Get the source of video
+video = video_pose.read_video(args["videoFile"])
+
+##########
 
 video_frame_number = int(video.duration * video.fps) ## duration: second / fps: frame per second
 video_frame_ciphers = math.ceil(math.log(video_frame_number, 10)) ## ex. 720 -> 3
