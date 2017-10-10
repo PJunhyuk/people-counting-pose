@@ -170,8 +170,6 @@ for i in range(0, video_frame_number):
                 if is_new_person == True:
                     tracker.append(dlib.correlation_tracker())
                     print('is_new_person!')
-                    print('len(tracker): ' + str(len(tracker)))
-                    print('tracker: ' + str(tracker))
                     rect_temp = []
                     rect_temp.append((int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))))
                     [tracker[i+len(tracker)-1].start_track(image, dlib.rectangle(*rect)) for i, rect in enumerate(rect_temp)]
@@ -196,8 +194,6 @@ for i in range(0, video_frame_number):
     print('frame: ' + str(i))
 
     print('len(target_points): ' + str(len(target_points)))
-    print('len(tracker): ' + str(len(tracker)))
-    print('tracker: ' + str(tracker))
 
     image_img_numpy = np.asarray(image_img)
 
