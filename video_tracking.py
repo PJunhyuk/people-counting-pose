@@ -80,13 +80,13 @@ video_frame_ciphers = math.ceil(math.log(video_frame_number, 10)) ## ex. 720 -> 
 pose_frame_list = []
 
 point_r = 3 # radius of points
-point_min = 10 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
-part_min = 3 # threshold of parts - If there are more than part_min parts in person, we define he/she is REAL PERSON / part means head, arm and leg
+point_min = 12 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
 point_num = 17 # There are 17 points in 1 person
 
-people_total_num = 0
-
 ##########
+
+# for object-tracker
+target_points = [] # format: [(minx, miny, maxx, maxy), (minx, miny, maxx, maxy) ... ]
 
 for i in range(0, video_frame_number):
     # Save i-th frame as image
@@ -105,7 +105,7 @@ for i in range(0, video_frame_number):
     unLab, pos_array, unary_array, pwidx_array, pw_array = eval_graph(sm, detections)
     person_conf_multi = get_person_conf_multicut(sm, unLab, unary_array, pos_array)
 
-    ##########
+    #####
 
     # Add library to draw image
     image_img = Image.fromarray(image)
@@ -122,9 +122,6 @@ for i in range(0, video_frame_number):
     people_num = int(people_num)
     print('people_num: ' + str(people_num))
 
-    # for object-tracker
-    target_points = [] # format: [(minx, miny, maxx, maxy), (minx, miny, maxx, maxy) ... ]
-
     #####
 
     for people_i in range(0, people_num):
@@ -135,7 +132,6 @@ for i in range(0, video_frame_number):
         point_list = []
         point_count = 0
         point_i = 0 # index of points
-        part_count = 0 # count of parts in THAT person
 
         # To find rectangle which include that people - list of points x, y coordinates
         people_x = []
@@ -153,8 +149,15 @@ for i in range(0, video_frame_number):
                     draw.ellipse(ellipse_set(person_conf_multi, people_i, point_i), fill=point_color)
                     people_x.append(person_conf_multi[people_i][point_i][0])
                     people_y.append(person_conf_multi[people_i][point_i][1])
-            # Draw rectangle which include that people
-            target_points.append((int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))))
+            if i != 0:
+                for k in range(len(tracker)):
+                    rect = tracker[k].get_position()
+                    if not(np.mean(people_x) < rect.right() and np.mean(people_x) > rect.left() and np.mean(people_y) < rect.bottom() and np.mean(people_y) > rect.top()):
+                        target_points.append((int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))))
+            elif i == 0:
+                target_points.append((int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))))
+
+    ##########
 
     ### object-tracker ###
     if i == 0: # for frame 0. set tracker
