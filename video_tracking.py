@@ -61,9 +61,10 @@ parser = ap.ArgumentParser()
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('-v', "--videoFile", help="Path to Video File")
 args = vars(parser.parse_args())
+video_name = args["videoFile"]
 
 # Get the source of video
-video = video_pose.read_video(args["videoFile"])
+video = video_pose.read_video(video_name)
 
 ##########
 
