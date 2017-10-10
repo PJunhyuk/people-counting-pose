@@ -64,6 +64,12 @@ $ docker run jgravity/tf-opencv-jupyter:pose-video
 ```
 > ex. testset/test_video_01.mov -> test_video_01
 
+#### Tracking people
+```
+# python video_tracking.py -v '{video_file_name}'
+```
+> ``` # python video_tracking.py -v 'test_video_01' ```
+
 ## Environments
 
 Use Docker [jgravity/tf-opencv-jupyter](https://hub.docker.com/r/jgravity/tf-opencv-jupyter/),

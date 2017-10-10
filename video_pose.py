@@ -177,9 +177,6 @@ def video2posevideo(video_name):
     video_frame_number = int(video.duration * video.fps) ## duration: second / fps: frame per second
     video_frame_ciphers = math.ceil(math.log(video_frame_number, 10)) ## ex. 720 -> 3
 
-    if not os.path.exists('testset/' + video_name):
-        os.makedirs('testset/' + video_name)
-
     pose_frame_list = []
 
     point_r = 3 # radius of points
