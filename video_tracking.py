@@ -56,6 +56,7 @@ draw_multi = PersonDraw()
 sess, inputs, outputs = predict.setup_pose_prediction(cfg)
 
 ##########
+## Get the source of video
 
 parser = ap.ArgumentParser()
 group = parser.add_mutually_exclusive_group(required=True)
@@ -63,8 +64,13 @@ group.add_argument('-v', "--videoFile", help="Path to Video File")
 args = vars(parser.parse_args())
 video_name = args["videoFile"]
 
-# Get the source of video
 video = video_pose.read_video(video_name)
+
+##########
+## Define some functions to mark at image
+
+def ellipse_set(person_conf_multi, people_i, point_i):
+    return (person_conf_multi[people_i][point_i][0] - point_r, person_conf_multi[people_i][point_i][1] - point_r, person_conf_multi[people_i][point_i][0] + point_r, person_conf_multi[people_i][point_i][1] + point_r)
 
 ##########
 
@@ -78,23 +84,16 @@ point_min = 10 # threshold of points - If there are more than point_min points i
 part_min = 3 # threshold of parts - If there are more than part_min parts in person, we define he/she is REAL PERSON / part means head, arm and leg
 point_num = 17 # There are 17 points in 1 person
 
-def ellipse_set(person_conf_multi, people_i, point_i):
-    return (person_conf_multi[people_i][point_i][0] - point_r, person_conf_multi[people_i][point_i][1] - point_r, person_conf_multi[people_i][point_i][0] + point_r, person_conf_multi[people_i][point_i][1] + point_r)
+people_total_num = 0
 
-def line_set(person_conf_multi, people_i, point_i, point_j):
-    return (person_conf_multi[people_i][point_i][0], person_conf_multi[people_i][point_i][1], person_conf_multi[people_i][point_j][0], person_conf_multi[people_i][point_j][1])
-
-def draw_ellipse_and_line(draw, person_conf_multi, people_i, a, b, c, point_color):
-    draw.ellipse(ellipse_set(person_conf_multi, people_i, a), fill=point_color)
-    draw.ellipse(ellipse_set(person_conf_multi, people_i, b), fill=point_color)
-    draw.ellipse(ellipse_set(person_conf_multi, people_i, c), fill=point_color)
-    draw.line(line_set(person_conf_multi, people_i, a, b), fill=point_color, width=5)
-    draw.line(line_set(person_conf_multi, people_i, b, c), fill=point_color, width=5)
+##########
 
 for i in range(0, video_frame_number):
+    # Save i-th frame as image
     image = video.get_frame(i/video.fps)
 
-    ######################
+    ##########
+    ## By pose-tensorflow
 
     image_batch = data_to_input(image)
 
@@ -106,19 +105,18 @@ for i in range(0, video_frame_number):
     unLab, pos_array, unary_array, pwidx_array, pw_array = eval_graph(sm, detections)
     person_conf_multi = get_person_conf_multicut(sm, unLab, unary_array, pos_array)
 
-    # print('person_conf_multi: ')
-    # print(type(person_conf_multi))
-    # print(person_conf_multi)
+    ##########
 
-    # Add library to save image
+    # Add library to draw image
     image_img = Image.fromarray(image)
 
-    # Save image with points of pose
+    # Prepare saving image with points of pose
     draw = ImageDraw.Draw(image_img)
+
+    #####
 
     people_num = 0
     people_real_num = 0
-    people_part_num = 0
 
     people_num = person_conf_multi.size / (point_num * 2)
     people_num = int(people_num)
@@ -126,6 +124,8 @@ for i in range(0, video_frame_number):
 
     # for object-tracker
     target_points = [] # format: [(minx, miny, maxx, maxy), (minx, miny, maxx, maxy) ... ]
+
+    #####
 
     for people_i in range(0, people_num):
         point_color_r = random.randrange(0, 256)
@@ -146,19 +146,6 @@ for i in range(0, video_frame_number):
                 point_count = point_count + 1
                 point_list.append(point_i)
 
-        # Draw each parts
-        if (5 in point_list) and (7 in point_list) and (9 in point_list): # Draw left arm
-            draw_ellipse_and_line(draw, person_conf_multi, people_i, 5, 7, 9, point_color)
-            part_count = part_count + 1
-        if (6 in point_list) and (8 in point_list) and (10 in point_list): # Draw right arm
-            draw_ellipse_and_line(draw, person_conf_multi, people_i, 6, 8, 10, point_color)
-            part_count = part_count + 1
-        if (11 in point_list) and (13 in point_list) and (15 in point_list): # Draw left leg
-            draw_ellipse_and_line(draw, person_conf_multi, people_i, 11, 13, 15, point_color)
-            part_count = part_count + 1
-        if (12 in point_list) and (14 in point_list) and (16 in point_list): # Draw right leg
-            draw_ellipse_and_line(draw, person_conf_multi, people_i, 12, 14, 16, point_color)
-            part_count = part_count + 1
         if point_count >= point_min:
             people_real_num = people_real_num + 1
             for point_i in range(0, point_num):
@@ -167,11 +154,7 @@ for i in range(0, video_frame_number):
                     people_x.append(person_conf_multi[people_i][point_i][0])
                     people_y.append(person_conf_multi[people_i][point_i][1])
             # Draw rectangle which include that people
-            # draw.rectangle([min(people_x), min(people_y), max(people_x), max(people_y)], fill=point_color, outline=5)
             target_points.append((int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))))
-
-        if part_count >= part_min:
-            people_part_num = people_part_num + 1
 
     ### object-tracker ###
     if i == 0: # for frame 0. set tracker
@@ -191,16 +174,13 @@ for i in range(0, video_frame_number):
         pt2 = (int(rect.right()), int(rect.bottom()))
         draw.rectangle([rect.left(), rect.top(), rect.right(), rect.bottom()], fill='red', outline=5)
         # draw.rectangle([min(people_x), min(people_y), max(people_x), max(people_y)], fill='red', outline=5)
-        # cv2.rectangle(image, pt1, pt2, (255, 255, 255), 3)
         print('Object ' + str(k) + ' tracked at [' + str(pt1) + ', ' + str(pt2) + ']')
 
     draw.text((0, 0), 'People(by point): ' + str(people_real_num) + ' (threshold = ' + str(point_min) + ')', (0,0,0), font=font)
-    draw.text((0, 32), 'People(by line): ' + str(people_part_num) + ' (threshold = ' + str(part_min) + ')', (0,0,0), font=font)
     draw.text((0, 64), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
     draw.text((0, 96), 'Total time required: ' + str(round(time.clock() - time_start, 1)) + 'sec', (0,0,0))
 
     print('people_real_num: ' + str(people_real_num))
-    print('people_part_num: ' + str(people_part_num))
     print('frame: ' + str(i))
 
     image_img_numpy = np.asarray(image_img)
@@ -208,6 +188,6 @@ for i in range(0, video_frame_number):
     pose_frame_list.append(image_img_numpy)
 
 video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
-video_pose.write_videofile("testset/" + video_name + "_pose.mp4", fps=video.fps)
+video_pose.write_videofile("testset/" + video_name + "_tracking.mp4", fps=video.fps)
 
 print("Time(s): " + str(time.clock() - time_start))
