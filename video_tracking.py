@@ -80,15 +80,16 @@ video_frame_ciphers = math.ceil(math.log(video_frame_number, 10)) ## ex. 720 -> 
 pose_frame_list = []
 
 point_r = 3 # radius of points
-point_min = 12 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
+point_min = 14 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
 point_num = 17 # There are 17 points in 1 person
 
 ##########
 
 # for object-tracker
 target_points = [] # format: [(minx, miny, maxx, maxy), (minx, miny, maxx, maxy) ... ]
+tracker = []
 
-for i in range(0, video_frame_number):
+for i in range(40, video_frame_number):
     # Save i-th frame as image
     image = video.get_frame(i/video.fps)
 
@@ -124,6 +125,15 @@ for i in range(0, video_frame_number):
 
     #####
 
+    if i != 0:
+        for k in range(len(tracker)):
+            tracker[k].update(image)
+            rect = tracker[k].get_position()
+            draw.rectangle([rect.left(), rect.top(), rect.right(), rect.bottom()], fill='red', outline=5)
+            print('Object ' + str(k) + ' tracked at [' + str(int(rect.left())) + ',' + str(int(rect.top())) + ', ' + str(int(rect.right())) + ',' + str(int(rect.bottom())) + ']')
+
+    #####
+
     for people_i in range(0, people_num):
         point_color_r = random.randrange(0, 256)
         point_color_g = random.randrange(0, 256)
@@ -149,35 +159,33 @@ for i in range(0, video_frame_number):
                     draw.ellipse(ellipse_set(person_conf_multi, people_i, point_i), fill=point_color)
                     people_x.append(person_conf_multi[people_i][point_i][0])
                     people_y.append(person_conf_multi[people_i][point_i][1])
-            if i != 0:
+            if i == 0:
+                target_points.append((int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))))
+            else:
+                is_new_person = True
                 for k in range(len(tracker)):
                     rect = tracker[k].get_position()
-                    if not(np.mean(people_x) < rect.right() and np.mean(people_x) > rect.left() and np.mean(people_y) < rect.bottom() and np.mean(people_y) > rect.top()):
-                        target_points.append((int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))))
-            elif i == 0:
-                target_points.append((int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))))
+                    if np.mean(people_x) < rect.right() and np.mean(people_x) > rect.left() and np.mean(people_y) < rect.bottom() and np.mean(people_y) > rect.top():
+                        is_new_person = False
+                if is_new_person == True:
+                    tracker.append(dlib.correlation_tracker())
+                    print('is_new_person!')
+                    print('len(tracker): ' + str(len(tracker)))
+                    print('tracker: ' + str(tracker))
+                    rect_temp = []
+                    rect_temp.append((int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))))
+                    [tracker[i+len(tracker)-1].start_track(image, dlib.rectangle(*rect)) for i, rect in enumerate(rect_temp)]
 
     ##########
 
-    ### object-tracker ###
-    if i == 0: # for frame 0. set tracker
+    if i == 0:
         # Initial co-ordinates of the object to be tracked
         # Create the tracker object
         tracker = [dlib.correlation_tracker() for _ in range(len(target_points))]
         # Provide the tracker the initial position of the object
         [tracker[i].start_track(image, dlib.rectangle(*rect)) for i, rect in enumerate(target_points)]
 
-    # Update the tracker
-    for k in range(len(tracker)):
-        tracker[k].update(image)
-        # Get the position of th object, draw a
-        # bounding box around it and display it.
-        rect = tracker[k].get_position()
-        pt1 = (int(rect.left()), int(rect.top()))
-        pt2 = (int(rect.right()), int(rect.bottom()))
-        draw.rectangle([rect.left(), rect.top(), rect.right(), rect.bottom()], fill='red', outline=5)
-        # draw.rectangle([min(people_x), min(people_y), max(people_x), max(people_y)], fill='red', outline=5)
-        print('Object ' + str(k) + ' tracked at [' + str(pt1) + ', ' + str(pt2) + ']')
+    #####
 
     draw.text((0, 0), 'People(by point): ' + str(people_real_num) + ' (threshold = ' + str(point_min) + ')', (0,0,0), font=font)
     draw.text((0, 64), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
@@ -185,6 +193,10 @@ for i in range(0, video_frame_number):
 
     print('people_real_num: ' + str(people_real_num))
     print('frame: ' + str(i))
+
+    print('len(target_points): ' + str(len(target_points)))
+    print('len(tracker): ' + str(len(tracker)))
+    print('tracker: ' + str(tracker))
 
     image_img_numpy = np.asarray(image_img)
 
