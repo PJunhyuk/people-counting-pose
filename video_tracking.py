@@ -38,7 +38,7 @@ import random
 import dlib
 import cv2
 
-import video_pose.py
+import video_pose
 
 ####################
 
