@@ -131,16 +131,19 @@ for i in range(0, video_frame_number):
     #####
 
     if i != 0:
+        tracker_left = []
         for k in range(len(tracker)):
             tracker[k].update(image)
             rect = tracker[k].get_position()
             if int(rect.left()) <= 0 or int(rect.top()) <= 0 or int(rect.right()) >= video_size_x or int(rect.bottom()) >= video_size_y:
                 # object left(leave)
                 print('Object GONE!')
-                del tracker[k]
+                tracker_left.append(k)
             else:
-                draw.rectangle([rect.left(), rect.top(), rect.right(), rect.bottom()], outline=('red', 5))
+                draw.rectangle([rect.left(), rect.top(), rect.right(), rect.bottom()], outline='red')
                 print('Object ' + str(k) + ' tracked at [' + str(int(rect.left())) + ',' + str(int(rect.top())) + ', ' + str(int(rect.right())) + ',' + str(int(rect.bottom())) + ']')
+        for j in range(len(tracker_left)):
+            del tracker[tracker_left[j]]
 
     #####
 
