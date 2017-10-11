@@ -31,7 +31,7 @@ from multiperson.visualize import PersonDraw, visualize_detections
 import matplotlib.pyplot as plt
 
 from PIL import Image, ImageDraw, ImageFont
-font = ImageFont.truetype("./font/NotoSans-Bold.ttf", 24)
+font = ImageFont.truetype("./font/NotoSans-Bold.ttf", 12)
 
 import random
 
@@ -129,7 +129,7 @@ for i in range(0, video_frame_number):
         for k in range(len(tracker)):
             tracker[k].update(image)
             rect = tracker[k].get_position()
-            draw.rectangle([rect.left(), rect.top(), rect.right(), rect.bottom()], fill='red', outline=5)
+            draw.rectangle([rect.left(), rect.top(), rect.right(), rect.bottom()], outline='red', outline=5)
             print('Object ' + str(k) + ' tracked at [' + str(int(rect.left())) + ',' + str(int(rect.top())) + ', ' + str(int(rect.right())) + ',' + str(int(rect.bottom())) + ']')
 
     #####
@@ -185,10 +185,10 @@ for i in range(0, video_frame_number):
 
     #####
 
-    draw.text((0, 0), 'People(by point): ' + str(people_real_num) + ' (threshold = ' + str(point_min) + ')', (0,0,0), font=font)
-    draw.text((0, 32), 'People(cumulative, by track): ' + str(len(tracker)), (0,0,0), font=font)
-    draw.text((0, 64), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
-    draw.text((0, 96), 'Total time required: ' + str(round(time.clock() - time_start, 1)) + 'sec', (0,0,0))
+    draw.text((0, 0), 'People(this frame, by pose): ' + str(people_real_num) + ' (threshold = ' + str(point_min) + ')', (0,0,0), font=font)
+    draw.text((0, 18), 'People(cumulative, by tracking): ' + str(len(tracker)), (0,0,0), font=font)
+    draw.text((0, 36), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
+    draw.text((0, 54), 'Total time required: ' + str(round(time.clock() - time_start, 1)) + 'sec', (0,0,0), font=font)
 
     print('people_real_num: ' + str(people_real_num))
     print('frame: ' + str(i))
