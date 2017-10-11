@@ -26,6 +26,7 @@ $ docker run jgravity/tf-opencv-jupyter:pose-video
 # ./download_models.sh
 # cd -
 ```
+> If ```# ./download_models.sh ``` not works, use  ```# ./download_models_wget.sh ```
 
 ###### Shorter version
 ```
