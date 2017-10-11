@@ -66,6 +66,9 @@ video_name = args["videoFile"]
 
 video = video_pose.read_video(video_name)
 
+video_size_x = video.size[0] # type: int
+video_size_y = video.size[1] # type: int
+
 ##########
 ## Define some functions to mark at image
 
@@ -82,6 +85,8 @@ pose_frame_list = []
 point_r = 3 # radius of points
 point_min = 14 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
 point_num = 17 # There are 17 points in 1 person
+
+tracking_people_count = 0
 
 ##########
 
@@ -129,8 +134,13 @@ for i in range(0, video_frame_number):
         for k in range(len(tracker)):
             tracker[k].update(image)
             rect = tracker[k].get_position()
-            draw.rectangle([rect.left(), rect.top(), rect.right(), rect.bottom()], outline='red', outline=5)
-            print('Object ' + str(k) + ' tracked at [' + str(int(rect.left())) + ',' + str(int(rect.top())) + ', ' + str(int(rect.right())) + ',' + str(int(rect.bottom())) + ']')
+            if int(rect.left()) <= 0 or int(rect.top()) <= 0 or int(rect.right()) >= video_size_x or int(rect.bottom()) >= video_size_y:
+                # object left(leave)
+                print('Object GONE!')
+                del tracker[k]
+            else:
+                draw.rectangle([rect.left(), rect.top(), rect.right(), rect.bottom()], outline='red', outline=5)
+                print('Object ' + str(k) + ' tracked at [' + str(int(rect.left())) + ',' + str(int(rect.top())) + ', ' + str(int(rect.right())) + ',' + str(int(rect.bottom())) + ']')
 
     #####
 
@@ -173,6 +183,7 @@ for i in range(0, video_frame_number):
                     rect_temp = []
                     rect_temp.append((int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))))
                     [tracker[i+len(tracker)-1].start_track(image, dlib.rectangle(*rect)) for i, rect in enumerate(rect_temp)]
+                    tracking_people_count = tracking_people_count + 1
 
     ##########
 
@@ -182,11 +193,12 @@ for i in range(0, video_frame_number):
         tracker = [dlib.correlation_tracker() for _ in range(len(target_points))]
         # Provide the tracker the initial position of the object
         [tracker[i].start_track(image, dlib.rectangle(*rect)) for i, rect in enumerate(target_points)]
+        tracking_people_count = int(len(tracker))
 
     #####
 
     draw.text((0, 0), 'People(this frame, by pose): ' + str(people_real_num) + ' (threshold = ' + str(point_min) + ')', (0,0,0), font=font)
-    draw.text((0, 18), 'People(cumulative, by tracking): ' + str(len(tracker)), (0,0,0), font=font)
+    draw.text((0, 18), 'People(cumulative, by tracking): ' + str(tracking_people_count), (0,0,0), font=font)
     draw.text((0, 36), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
     draw.text((0, 54), 'Total time required: ' + str(round(time.clock() - time_start, 1)) + 'sec', (0,0,0), font=font)
 
