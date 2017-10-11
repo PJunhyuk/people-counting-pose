@@ -139,7 +139,7 @@ for i in range(0, video_frame_number):
                 print('Object GONE!')
                 del tracker[k]
             else:
-                draw.rectangle([rect.left(), rect.top(), rect.right(), rect.bottom()], outline='red', outline=5)
+                draw.rectangle([rect.left(), rect.top(), rect.right(), rect.bottom()], outline=('red', 5))
                 print('Object ' + str(k) + ' tracked at [' + str(int(rect.left())) + ',' + str(int(rect.top())) + ', ' + str(int(rect.right())) + ',' + str(int(rect.bottom())) + ']')
 
     #####
