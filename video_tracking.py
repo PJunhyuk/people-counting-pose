@@ -200,8 +200,8 @@ for i in range(0, video_frame_number):
 
     #####
 
-    draw.text((0, 0), 'People(this frame, by pose): ' + str(people_real_num) + ' (threshold = ' + str(point_min) + ')', (0,0,0), font=font)
-    draw.text((0, 18), 'People(cumulative, by tracking): ' + str(tracking_people_count), (0,0,0), font=font)
+    draw.text((0, 0), 'People(this frame): ' + str(len(tracker)), (0,0,0), font=font)
+    draw.text((0, 18), 'People(cumulative): ' + str(tracking_people_count), (0,0,0), font=font)
     draw.text((0, 36), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
     draw.text((0, 54), 'Total time required: ' + str(round(time.clock() - time_start, 1)) + 'sec', (0,0,0), font=font)
 
