@@ -33,6 +33,11 @@ $ docker run jgravity/tf-opencv-jupyter:pose-video
 # chmod u+x ./compile.sh && ./compile.sh && cd models/coco && chmod u+x download_models.sh && ./download_models.sh && cd -
 ```
 
+#### Download videos in testset
+```
+# ./testset/download_testset_wget.sh
+```
+
 #### Multiperson pose detection in image
 ```
 # TF_CUDNN_USE_AUTOTUNE=0 python3 demo/demo_multiperson.py {image_file_name}
@@ -97,8 +102,8 @@ or install
 ## Reference
 
 ### Test dataset
-- testset/video_1.mov: [Pedestrian overpass - original video (sample) - BriefCam Syndex](https://www.youtube.com/watch?v=aUdKzb4LGJI)
-
+- testset/test_video_01: [Pedestrian overpass - original video (sample) - BriefCam Syndex](https://www.youtube.com/watch?v=aUdKzb4LGJI)
+- testset/test_video_02: [Pedestrian Walking and Traffic Exit,Human Activity Recognition Video ,DataSet By UET Peshawar](https://www.youtube.com/watch?v=eZRLm7KK8HA)
 ### Citation
     @inproceedings{insafutdinov2017cvpr,
 	    title = {ArtTrack: Articulated Multi-person Tracking in the Wild},
