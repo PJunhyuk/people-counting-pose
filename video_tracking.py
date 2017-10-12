@@ -87,6 +87,7 @@ point_min = 14 # threshold of points - If there are more than point_min points i
 point_num = 17 # There are 17 points in 1 person
 
 tracking_people_count = 0
+tracker_len_prev = 0
 
 ##########
 
@@ -186,7 +187,6 @@ for i in range(0, video_frame_number):
                     rect_temp = []
                     rect_temp.append((int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))))
                     [tracker[i+len(tracker)-1].start_track(image, dlib.rectangle(*rect)) for i, rect in enumerate(rect_temp)]
-                    tracking_people_count = tracking_people_count + 1
 
     ##########
 
@@ -196,9 +196,12 @@ for i in range(0, video_frame_number):
         tracker = [dlib.correlation_tracker() for _ in range(len(target_points))]
         # Provide the tracker the initial position of the object
         [tracker[i].start_track(image, dlib.rectangle(*rect)) for i, rect in enumerate(target_points)]
-        tracking_people_count = int(len(tracker))
 
     #####
+
+    if tracker_len_prev < int(len(tracker)):
+        tracking_people_count = tracking_people_count + int(len(tracker)) - tracker_len_prev
+    tracker_len_prev = int(len(tracker))
 
     draw.text((0, 0), 'People(this frame): ' + str(len(tracker)), (0,0,0), font=font)
     draw.text((0, 18), 'People(cumulative): ' + str(tracking_people_count), (0,0,0), font=font)
