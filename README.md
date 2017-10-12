@@ -35,7 +35,7 @@ $ docker run jgravity/tf-opencv-jupyter:pose-video
 
 #### Download videos in testset
 ```
-# chmod u+x ./testset/download_testset_wget.sh && ./testset/download_testset_wget.sh
+# cd testset && chmod u+x ./download_testset_wget.sh && ./download_testset_wget.sh && cd -
 ```
 
 #### Multiperson pose detection in image
