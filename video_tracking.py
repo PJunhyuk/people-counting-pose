@@ -143,8 +143,9 @@ for i in range(0, video_frame_number):
             else:
                 draw.rectangle([rect.left(), rect.top(), rect.right(), rect.bottom()], outline='red')
                 print('Object ' + str(k) + ' tracked at [' + str(int(rect.left())) + ',' + str(int(rect.top())) + ', ' + str(int(rect.right())) + ',' + str(int(rect.bottom())) + ']')
-        for j in range(len(tracker_left)):
-            del tracker[tracker_left[j]]
+        if len(tracker_left) != 0:
+            for j in range(len(tracker_left)):
+                del tracker[tracker_left[len(tracker_left) - 1 - j]]
 
     #####
 
