@@ -10,7 +10,7 @@ import time
 
 def read_video(video_name):
     # Read video from file
-    video_name_input = 'testset/' + video_name + '.mov'
+    video_name_input = 'testset/' + video_name
     video = VideoFileClip(video_name_input)
     return video
 

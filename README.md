@@ -74,7 +74,7 @@ $ docker run jgravity/tf-opencv-jupyter:pose-video
 ```
 # python video_tracking.py -v '{video_file_name}'
 ```
-> ``` # python video_tracking.py -v 'test_video_01' ```
+> Qualified supporting video type: mov
 
 ## Environments
 
