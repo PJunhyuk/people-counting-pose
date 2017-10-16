@@ -32,7 +32,7 @@ $ docker run jgravity/tf-opencv-jupyter:pose-video
 ```
 # chmod u+x ./compile.sh && ./compile.sh && cd models/coco && chmod u+x download_models.sh && ./download_models.sh && cd -
 ```
-> # chmod u+x ./compile.sh && ./compile.sh && cd models/coco && chmod u+x download_models_wget.sh && ./download_models_wget.sh && cd -
+> ```# chmod u+x ./compile.sh && ./compile.sh && cd models/coco && chmod u+x download_models_wget.sh && ./download_models_wget.sh && cd -```
 
 #### Download videos in testset
 ```
