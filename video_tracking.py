@@ -219,6 +219,6 @@ for i in range(0, video_frame_number):
     pose_frame_list.append(image_img_numpy)
 
 video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
-video_pose.write_videofile("testset/" + video_name + "_tracking.mp4", fps=video.fps)
+video_pose.write_videofile("testset/" + video_name + "_tracking.mp4", fps=video.fps, progress_bar=False)
 
 print("Time(s): " + str(time.clock() - time_start))
