@@ -210,7 +210,7 @@ for i in range(0, video_frame_number):
 
     print('People(this frame): ' + str(len(tracker)))
     print('People(cumulative): ' + str(tracking_people_count))
-    print('Frame: ' + str(i) + "/" + str(video_trame_number))
+    print('Frame: ' + str(i) + "/" + str(video_frame_number))
     print('Time required: ' + str(round(time.clock() - time_start, 1)) + 'sec')
 
     image_img_numpy = np.asarray(image_img)
