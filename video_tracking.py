@@ -127,7 +127,6 @@ for i in range(0, video_frame_number):
 
     people_num = person_conf_multi.size / (point_num * 2)
     people_num = int(people_num)
-    print('people_num: ' + str(people_num))
 
     #####
 
@@ -209,10 +208,10 @@ for i in range(0, video_frame_number):
     draw.text((0, 36), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
     draw.text((0, 54), 'Total time required: ' + str(round(time.clock() - time_start, 1)) + 'sec', (0,0,0), font=font)
 
-    print('people_real_num: ' + str(people_real_num))
-    print('frame: ' + str(i))
-
-    print('len(target_points): ' + str(len(target_points)))
+    print('People(this frame): ' + str(len(tracker)))
+    print('People(cumulative): ' + str(tracking_people_count))
+    print('Frame: ' + str(i) + "/" + str(video_trame_number))
+    print('Time required: ' + str(round(time.clock() - time_start, 1)) + 'sec')
 
     image_img_numpy = np.asarray(image_img)
 
@@ -223,3 +222,4 @@ video_output_name = video_name.split('.')[0]
 video_pose.write_videofile("testset/" + video_output_name + "_tracking.mp4", fps=video.fps, progress_bar=False)
 
 print("Time(s): " + str(time.clock() - time_start))
+print("Video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
