@@ -66,8 +66,9 @@ video_name = args["videoFile"]
 
 video = video_pose.read_video(video_name)
 
-video_size_x = video.size[0] # type: int
-video_size_y = video.size[1] # type: int
+print("Input video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
+
+video.resize(width = 640)
 
 ##########
 ## Define some functions to mark at image
@@ -135,7 +136,7 @@ for i in range(0, video_frame_number):
         for k in range(len(tracker)):
             tracker[k].update(image)
             rect = tracker[k].get_position()
-            if int(rect.left()) <= 0 or int(rect.top()) <= 0 or int(rect.right()) >= video_size_x or int(rect.bottom()) >= video_size_y:
+            if int(rect.left()) <= 0 or int(rect.top()) <= 0 or int(rect.right()) >= video.size[0] or int(rect.bottom()) >= video.size[1]:
                 # object left(leave)
                 print('Object GONE!')
                 tracker_left.append(k)
@@ -222,4 +223,4 @@ video_output_name = video_name.split('.')[0]
 video_pose.write_videofile("testset/" + video_output_name + "_tracking.mp4", fps=video.fps, progress_bar=False)
 
 print("Time(s): " + str(time.clock() - time_start))
-print("Video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
+print("Output video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
