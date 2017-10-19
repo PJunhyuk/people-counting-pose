@@ -68,7 +68,7 @@ video = video_pose.read_video(video_name)
 
 print("Input video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
 
-video.resize(width = 640)
+video = video.resize(width = 640)
 
 ##########
 ## Define some functions to mark at image
