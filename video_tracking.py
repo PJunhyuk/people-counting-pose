@@ -59,16 +59,42 @@ sess, inputs, outputs = predict.setup_pose_prediction(cfg)
 ## Get the source of video
 
 parser = ap.ArgumentParser()
-group = parser.add_mutually_exclusive_group(required=True)
-group.add_argument('-v', "--videoFile", help="Path to Video File")
-args = vars(parser.parse_args())
-video_name = args["videoFile"]
+# group = parser.add_mutually_exclusive_group(required=True)
+# group.add_argument('-f', "--videoFile", help="Path to Video File")
+# group.add_argument('-w', "--videoWidth", help="Width of Output Video")
+# group.add_argument('-h', "--videoHeight", help="Height of Output Video")
+parser.add_argument('-f', "--videoFile", help="Path to Video File")
+parser.add_argument('-w', "--videoWidth", help="Width of Output Video")
+parser.add_argument('-h', "--videoHeight", help="Height of Output Video")
+
+args, leftovers = parser.parse_known_args()
+# args = vars(parser.parse_args())
+
+if args.videoFile is not None:
+    video_name = args.videoFile
 
 video = video_pose.read_video(video_name)
-
 print("Input video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
 
-video = video.resize(width = 640)
+if args.videoWidth is not None:
+    video_width = int(args["videoWidth"])
+    if args.videoHeight is not None:
+        video_height = int(args["videoHeight"])
+        video = video.resize( (video_width, video_height) )
+    else:
+        video = video.resize(width = video_width)
+else:
+    if args.videoHeight is not None:
+        video_height = int(args["videoHeight"])
+        video = video.resize(height = video_height)
+    else:
+        video = video
+
+print("Changed video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
+
+# video_name = args["videoFile"]
+# video_width = int(args["videoWidth"])
+# video_height = int(args["videoHeight"])
 
 ##########
 ## Define some functions to mark at image
