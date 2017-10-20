@@ -61,6 +61,7 @@ sess, inputs, outputs = predict.setup_pose_prediction(cfg)
 parser = ap.ArgumentParser()
 parser.add_argument('-f', "--videoFile", help="Path to Video File")
 parser.add_argument('-w', "--videoWidth", help="Width of Output Video")
+parser.add_argument('-o', "--videoType", help="Extension of Output Video")
 
 args = vars(parser.parse_args())
 
@@ -73,6 +74,12 @@ if args["videoWidth"] is not None:
     video_width = int(args["videoWidth"])
     video = video.resize(width = video_width)
 print("Changed video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
+
+if args["videoType"] is not None:
+    video_type = args["videoType"]
+else:
+    video_type = "mp4"
+print("Output video type: " + video_type)
 
 ##########
 ## Define some functions to mark at image
@@ -224,7 +231,7 @@ for i in range(0, video_frame_number):
 
 video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
 video_output_name = video_name.split('.')[0]
-video_pose.write_videofile("testset/" + video_output_name + "_tracking.mp4", fps=video.fps, progress_bar=False)
+video_pose.write_videofile("testset/" + video_output_name + "_tracking." + video_type, fps=video.fps, progress_bar=False)
 
 print("Time(s): " + str(time.clock() - time_start))
 print("Output video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
