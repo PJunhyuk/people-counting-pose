@@ -67,6 +67,9 @@ args = vars(parser.parse_args())
 
 if args["videoFile"] is not None:
     video_name = args["videoFile"]
+else:
+    print("You have to input videoFile name")
+    sys.exit(1)
 video = video_pose.read_video(video_name)
 print("Input video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
 
