@@ -1,7 +1,7 @@
 ## Import the required modules
 # Check time required
 import time
-time_start = time.clock()
+time_start = time.time()
 
 import sys
 import os
@@ -221,12 +221,12 @@ for i in range(0, video_frame_number):
     draw.text((0, 0), 'People(this frame): ' + str(len(tracker)), (0,0,0), font=font)
     draw.text((0, 18), 'People(cumulative): ' + str(tracking_people_count), (0,0,0), font=font)
     draw.text((0, 36), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
-    draw.text((0, 54), 'Total time required: ' + str(round(time.clock() - time_start, 1)) + 'sec', (0,0,0), font=font)
+    draw.text((0, 54), 'Total time required: ' + str(round(time.time() - time_start, 1)) + 'sec', (0,0,0), font=font)
 
     print('People(this frame): ' + str(len(tracker)))
     print('People(cumulative): ' + str(tracking_people_count))
     print('Frame: ' + str(i) + "/" + str(video_frame_number))
-    print('Time required: ' + str(round(time.clock() - time_start, 1)) + 'sec')
+    print('Time required: ' + str(round(time.time() - time_start, 1)) + 'sec')
 
     image_img_numpy = np.asarray(image_img)
 
@@ -236,5 +236,5 @@ video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
 video_output_name = video_name.split('.')[0]
 video_pose.write_videofile("testset/" + video_output_name + "_tracking." + video_type, fps=video.fps, progress_bar=False)
 
-print("Time(s): " + str(time.clock() - time_start))
+print("Time(s): " + str(time.time() - time_start))
 print("Output video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
