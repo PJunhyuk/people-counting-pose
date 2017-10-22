@@ -12,6 +12,18 @@ $ docker pull jgravity/tf-opencv-jupyter:pose-video
 $ docker run jgravity/tf-opencv-jupyter:pose-video
 ```
 
+###### For GPU
+```
+$ nvidia-docker pull jgravity/tf-opencv-jupyter:pose-video
+$ nvidia-docker run -it --name pose-tf-video jgravity/tf-opencv-jupyter:pose-video
+```
+
+> In other terminal,
+
+```
+$ nvidia-docker exec -it pose-tf-video /bin/bash
+```
+
 #### Download/Install code
 ```
 # git clone https://github.com/PJunhyuk/pose-tensorflow-video
@@ -73,7 +85,7 @@ $ docker run jgravity/tf-opencv-jupyter:pose-video
 
 #### Tracking people
 ```
-# python video_tracking.py -v '{video_file_name}'
+# python video_tracking.py -f '{video_file_name}'
 ```
 > Qualified supporting video type: mov, mp4
 

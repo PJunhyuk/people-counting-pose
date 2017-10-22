@@ -1,9 +1,11 @@
 ## RESULTS
 
+> Print CPU info: ```# cat /proc/cpuinfo | grep 'model name' | uniq```
+
 ### video_tracking.py
 
 #### DT
-> CPU: Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz  3.30 GHz  
+> CPU: Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz
 > GPU: NVIDIA GeForce GTX 750 Ti  
 
 - test_video_01.mov
@@ -35,4 +37,17 @@
     > ```# python video_tracking.py -f 'test_video_03f.mp4' -w 360```
 
 
-#### LabDT
+#### MCML
+> CPU: Intel(r) Xeon(R) CPU E5-2687W v3 @ 3.10GHz
+
+- test_video_01.mov
+
+  - 140.0sec - 23b0a408ab14066e73b99fe5c272849b6bffe32e - test_video_01_tracking_006.mp4
+
+- test_video_01f.mov
+
+  - 435.0sec - 23b0a408ab14066e73b99fe5c272849b6bffe32e - test_video_01_tracking_007.mp4
+
+- test_video_03f.mp4
+
+  -
