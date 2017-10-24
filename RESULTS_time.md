@@ -21,6 +21,7 @@
   - 1286.7sec - 3c68751f5181a0a01250cd28ccb4cdd9e9355227 - test_video_01f_tracking_005.mp4
     > ```# python video_tracking.py -f 'test_video_01f.mov' -w 360```
 
+  - 2298.2sec - afcaf3c02ec18f3ff82e28769ca7287af1c3eb68
 
 - test_video_03_01.mp4
 > 2.3MB, 119 frame, [1920, 1080]
