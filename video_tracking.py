@@ -37,7 +37,6 @@ import random
 
 # for object-tracker
 import dlib
-import cv2
 
 import video_pose
 
