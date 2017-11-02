@@ -97,7 +97,8 @@ for people_i in range(0, people_num):
     if point_count > 5: # If there are more than 5 point in person, we define he/she is REAL PERSON
         people_real_num = people_real_num + 1
         for point_i in range(0, point_num):
-            draw.ellipse((person_conf_multi[people_i][point_i][0] - point_r, person_conf_multi[people_i][point_i][1] - point_r, person_conf_multi[people_i][point_i][0] + point_r, person_conf_multi[people_i][point_i][1] + point_r), fill=point_color)
+            if person_conf_multi[people_i][point_i][0] + person_conf_multi[people_i][point_i][1] != 0: # If coordinates of point is (0, 0) == meaningless data
+                draw.ellipse((person_conf_multi[people_i][point_i][0] - point_r, person_conf_multi[people_i][point_i][1] - point_r, person_conf_multi[people_i][point_i][0] + point_r, person_conf_multi[people_i][point_i][1] + point_r), fill=point_color)
 
 print('people_real_num: ')
 print(people_real_num)
