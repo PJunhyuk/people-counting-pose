@@ -19,4 +19,4 @@ video = cv2.VideoCapture(video_file_route)
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
 
 video_name = video_file_name.split('.')[0]
-out = cv2.VideoWriter('testset/' + video_name + '.avi',fourcc, 20.0, (640,480))
+out = cv2.VideoWriter('testset/' + video_name + '_bgrm.avi',fourcc, 20.0, (640,480))
