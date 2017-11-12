@@ -17,8 +17,8 @@ else:
 video_file_route = 'testset/' + video_file_name
 video = cv2.VideoCapture(video_file_route)
 
-video_width = video.get(3)
-video_height = video.get(4)
+video_width = int(video.get(3))
+video_height = int(video.get(4))
 video_fps = 1 / video.get(2)
 
 # Define the codec and create VideoWriter object
