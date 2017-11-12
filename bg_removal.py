@@ -22,7 +22,7 @@ video_height = int(video.get(4))
 video_fps = 1 / video.get(2)
 
 # Define the codec and create VideoWriter object
-fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+fourcc = cv2.VideoWriter_fourcc(*'MPEG')
 
 video_name = video_file_name.split('.')[0]
-out = cv2.VideoWriter('testset/' + video_name + '_bgrm.mp4', fourcc, video_fps, (video_width, video_height))
+out = cv2.VideoWriter('testset/' + video_name + '_bgrm.avi', fourcc, video_fps, (video_width, video_height))
