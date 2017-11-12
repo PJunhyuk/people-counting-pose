@@ -34,6 +34,8 @@ video_width = int(video.get(3))
 video_height = int(video.get(4))
 video_fps = 1 / video.get(2)
 
+fgbg = cv2.createBackgroundSubtractorMOG2()
+
 frame_output_list = []
 
 while(1):
@@ -41,7 +43,7 @@ while(1):
     if ret == False:
         break
 
-    frame_output = frame
+    frame_output = fgbg.apply(frame)
 
     frame_output_list.append(frame_output)
 
