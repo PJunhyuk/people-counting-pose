@@ -45,11 +45,20 @@ while(1):
     if ret == False:
         break
 
-    frame_output = fgbg.apply(frame)
+    frame_fgbg = fgbg.apply(frame)
 
-    frame_output_numpy = np.asarray(frame_output)
+    frame_output = frame
 
-    frame_output_list.append(frame_output_numpy)
+    for i in range(0, video_width):
+        for j in range(0, video_height):
+            if frame_fgbg[i][j] == 127:
+                for k in range(0, 3):
+                    frame_output[i][j][k] = 0
+            else:
+                for k in range(0, 3):
+                    frame_output[i][j][k] = frame[i][j][k]
+
+    frame_output_list.append(frame_output)
 
 video_output = ImageSequenceClip(frame_output_list, fps=video_fps)
 video_name = video_file_name.split('.')[0]
