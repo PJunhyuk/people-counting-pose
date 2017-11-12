@@ -52,7 +52,7 @@ while(1):
 
     for i in range(0, video_height):
         for j in range(0, video_width):
-            if frame_fgbg[i][j] == 127:
+            if frame_fgbg[i][j] == 0:
                 for k in range(0, 3):
                     frame_output[i][j][k] = 0
             else:
