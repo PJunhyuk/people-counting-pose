@@ -39,6 +39,7 @@ video_height = int(video.get(4))
 fgbg = cv2.createBackgroundSubtractorMOG2()
 
 frame_output_list = []
+frame_index = 0
 
 while(1):
     ret, frame = video.read()
@@ -59,6 +60,8 @@ while(1):
                     frame_output[i][j][k] = frame[i][j][k]
 
     frame_output_list.append(frame_output)
+    print('frame_index: ' + frame_index)
+    frame_index = frame_index + 1
 
 video_output = ImageSequenceClip(frame_output_list, fps=video_fps)
 video_name = video_file_name.split('.')[0]
