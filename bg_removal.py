@@ -6,6 +6,8 @@ import argparse as ap
 parser = ap.ArgumentParser()
 parser.add_argument('-f', "--videoFile", help="Path to Video File")
 
+args = vars(parser.parse_args())
+
 if args["videoFile"] is not None:
     video_file_name = args["videoFile"]
 else:
