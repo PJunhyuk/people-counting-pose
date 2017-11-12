@@ -60,7 +60,7 @@ while(1):
                     frame_output[i][j][k] = frame[i][j][k]
 
     frame_output_list.append(frame_output)
-    print('frame_index: ' + frame_index)
+    print('frame_index: ' + str(frame_index))
     frame_index = frame_index + 1
 
 video_output = ImageSequenceClip(frame_output_list, fps=video_fps)
