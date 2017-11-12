@@ -1,7 +1,12 @@
-import cv2
-
+## default
 import sys
 import argparse as ap
+
+## opencv
+import cv2
+
+## moviepy
+from moviepy.editor import *
 
 parser = ap.ArgumentParser()
 parser.add_argument('-f', "--videoFile", help="Path to Video File")
@@ -17,12 +22,23 @@ else:
 video_file_route = 'testset/' + video_file_name
 video = cv2.VideoCapture(video_file_route)
 
+if not video.isOpened():
+    print("Video doesn't opened!")
+    sys.exit(1)
+
 video_width = int(video.get(3))
 video_height = int(video.get(4))
 video_fps = 1 / video.get(2)
 
-# Define the codec and create VideoWriter object
-fourcc = cv2.VideoWriter_fourcc(*'DIVX')
+frame_output_list = []
 
+while(1):
+    ret, frame = video.read()
+
+    frame_output = frame
+
+    frame_output_list.append(frame_output)
+
+video_output = ImageSequenceClip(frame_output_list, fps=video_fps)
 video_name = video_file_name.split('.')[0]
-out = cv2.VideoWriter('testset/' + video_name + '_bgrm.avi', fourcc, video_fps, (video_width, video_height))
+video_output.write_videofile("testset/" + video_name + "_bgrm.mp4", fps=video.fps, progress_bar=False)
