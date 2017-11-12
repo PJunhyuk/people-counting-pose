@@ -32,9 +32,9 @@ if not video.isOpened():
     print("Video doesn't opened!")
     sys.exit(1)
 
+video_fps = 1 / video.get(2)
 video_width = int(video.get(3))
 video_height = int(video.get(4))
-video_fps = 1 / video.get(2)
 
 fgbg = cv2.createBackgroundSubtractorMOG2()
 
@@ -49,8 +49,8 @@ while(1):
 
     frame_output = frame
 
-    for i in range(0, video_width):
-        for j in range(0, video_height):
+    for i in range(0, video_height):
+        for j in range(0, video_width):
             if frame_fgbg[i][j] == 127:
                 for k in range(0, 3):
                     frame_output[i][j][k] = 0
