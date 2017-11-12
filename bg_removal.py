@@ -39,6 +39,9 @@ while(1):
 
     frame_output_list.append(frame_output)
 
+    if ret == False:
+        break
+
 video_output = ImageSequenceClip(frame_output_list, fps=video_fps)
 video_name = video_file_name.split('.')[0]
 video_output.write_videofile("testset/" + video_name + "_bgrm.mp4", fps=video.fps, progress_bar=False)
