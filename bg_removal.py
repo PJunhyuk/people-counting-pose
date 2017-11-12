@@ -38,13 +38,12 @@ frame_output_list = []
 
 while(1):
     ret, frame = video.read()
+    if ret == False:
+        break
 
     frame_output = frame
 
     frame_output_list.append(frame_output)
-
-    if ret == False:
-        break
 
 video_output = ImageSequenceClip(frame_output_list, fps=video_fps)
 video_name = video_file_name.split('.')[0]
