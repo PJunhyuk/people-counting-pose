@@ -93,9 +93,9 @@ else:
 print("Output video type: " + video_type)
 
 if args["poseThreshold"] is not None:
-    point_min = 14
+    point_min = args["poseThreshold"] # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
 else:
-    point_min = args["poseThreshold"]
+    point_min = 14
 print("Pose Threshold: " + str(point_min))
 ##########
 ## Define some functions to mark at image
@@ -111,7 +111,6 @@ video_frame_ciphers = math.ceil(math.log(video_frame_number, 10)) ## ex. 720 -> 
 pose_frame_list = []
 
 point_r = 3 # radius of points
-# point_min = 14 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
 point_num = 17 # There are 17 points in 1 person
 
 tracking_people_count = 0
