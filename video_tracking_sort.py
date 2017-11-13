@@ -116,6 +116,7 @@ tracker_len_prev = 0
 # for object-tracker
 target_points = [] # format: [(minx, miny, maxx, maxy), (minx, miny, maxx, maxy) ... ]
 tracker = []
+total_people = []
 
 for i in range(0, video_frame_number):
     # Save i-th frame as image
@@ -189,7 +190,10 @@ for i in range(0, video_frame_number):
 
     for d in track_bbs_ids:
         draw.rectangle([d[0], d[1], d[2], d[3]], outline='red')
+        print(d[4])
+        total_people.append(d[4])
 
+    print('total_people: ' + str(len(total_people)))
     print('people_real_num: ' + str(people_real_num))
     print('len(track_bbs_ids): ' + str(len(track_bbs_ids)))
     print('Frame: ' + str(i) + "/" + str(video_frame_number))
