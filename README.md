@@ -1,6 +1,4 @@
-# pose-tensorflow-video
-
-Based on [pose-tensorflow](https://github.com/eldar/pose-tensorflow)
+# ODIN: People counting and classification in videos based on pose estimation
 
 ## Usage
 
@@ -8,80 +6,29 @@ Install [Docker](https://docker.com) and [Kitematic](https://kitematic.com/)
 
 #### Pull docker image
 ```
-$ docker pull jgravity/tf-opencv-jupyter:pose-video
-$ docker run jgravity/tf-opencv-jupyter:pose-video
+$ docker pull jgravity/tensorflow-opencv:odin
+$ docker run -it --name odin jgravity/tensorflow-opencv:odin bin/bash
 ```
 
-###### For GPU
-```
-$ nvidia-docker pull jgravity/tf-opencv-jupyter:pose-video
-$ nvidia-docker run -it --name pose-tf-video jgravity/tf-opencv-jupyter:pose-video
-```
-
-> In other terminal,
-
-```
-$ nvidia-docker exec -it pose-tf-video /bin/bash
-```
+> Use ```nvidia-docker``` instead of ```docker``` to use GPU
 
 #### Download/Install code
 ```
-# git clone https://github.com/PJunhyuk/pose-tensorflow-video
-
-// If compile.sh permission ERROR
-# chmod u+x compile.sh
-# ./compile.sh
-
-# cd models/coco
-// If download_models.sh permission ERROR
-# chmod u+x download_models.sh
-# ./download_models.sh
-# cd -
+# git clone https://github.com/PJunhyuk/people-counting-classification
+# cd people-counting-classification
+# chmod u+x ./compile.sh && ./compile.sh && cd models/coco && chmod u+x download_models_wget.sh && ./download_models_wget.sh && cd -
 ```
-> If ```# ./download_models.sh ``` not works, use  ```# chmod u+x download_models_wget.sh ``` ``` # ./download_models_wget.sh ```
 
-###### Shorter version
-```
-# chmod u+x ./compile.sh && ./compile.sh && cd models/coco && chmod u+x download_models.sh && ./download_models.sh && cd -
-```
-> ```# chmod u+x ./compile.sh && ./compile.sh && cd models/coco && chmod u+x download_models_wget.sh && ./download_models_wget.sh && cd -```
-
-#### Download videos in testset
+#### Download sample videos in testset
 ```
 # cd testset && chmod u+x ./download_testset_wget.sh && ./download_testset_wget.sh && cd -
 ```
 
-#### Multiperson pose detection in image
+#### Background removal
 ```
-# TF_CUDNN_USE_AUTOTUNE=0 python3 demo/demo_multiperson.py {image_file_name}
+# python bg_removal.py -f '{video_file_name}'
 ```
-> ex. testset/test_multi_00.png -> test_multi_00
-
-#### Convert video frames to images
-```
-# python -c 'from video_pose import *; video2frame("{video_file_name}")'
-```
-> ex. testset/test_video_01.mov -> test_video_01
-```
-# python -c 'import time; start_time = time.clock(); from video_pose import *; video2frame("{video_file_name}"); print("Time(s): " + str(time.clock() - start_time))'
-```
-> With stopwatch
-
-#### Convert video frames to images with pose
-```
-# python -c 'from video_pose import *; video2poseframe("{video_file_name}")'
-```
-> ex. testset/test_video_01.mov -> test_video_01
-```
-# python -c 'import time; start_time = time.clock(); from video_pose import *; video2poseframe("{video_file_name}"); print("Time(s): " + str(time.clock() - start_time))'
-```
-> With stopwatch
-
-#### Convert video to video with pose
-```
-# python -c 'from video_pose import *; video2posevideo("{video_file_name}")'
-```
-> ex. testset/test_video_01.mov -> test_video_01
+> Default route is ```/people-counting-classification/testset```, and you have to drop ```testset/``` for ```{video_file_name}```
 
 #### Tracking people
 ```
@@ -89,9 +36,9 @@ $ nvidia-docker exec -it pose-tf-video /bin/bash
 ```
 > Qualified supporting video type: mov, mp4
 
-## Environments
+## Dependencies
 
-Use Docker [jgravity/tf-opencv-jupyter](https://hub.docker.com/r/jgravity/tf-opencv-jupyter/),
+Use Docker [jgravity/tensorflow-opencv](https://hub.docker.com/r/jgravity/tensorflow-opencv/),
 
 or install
 
@@ -117,6 +64,7 @@ or install
 ### Test dataset
 - testset/test_video_01: [Pedestrian overpass - original video (sample) - BriefCam Syndex](https://www.youtube.com/watch?v=aUdKzb4LGJI)
 - testset/test_video_02: [Pedestrian Walking and Traffic Exit,Human Activity Recognition Video ,DataSet By UET Peshawar](https://www.youtube.com/watch?v=eZRLm7KK8HA)
+
 ### Citation
     @inproceedings{insafutdinov2017cvpr,
 	    title = {ArtTrack: Articulated Multi-person Tracking in the Wild},
