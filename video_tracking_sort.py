@@ -205,7 +205,10 @@ for i in range(0, video_frame_number):
     print('Frame: ' + str(i) + "/" + str(video_frame_number))
     print('Time required: ' + str(round(time.time() - time_start, 1)) + 'sec')
 
-    draw.text((0, 0), str(total_people), (255,0,0), font=font)
+    draw.text((0, 0), 'total_people_list: ' + str(total_people), (0,0,0), font=font)
+    draw.text((0, 18), 'total_people: ' + str(len(total_people)), (0,0,0), font=font)
+    draw.text((0, 36), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
+    draw.text((0, 54), 'Total time required: ' + str(round(time.time() - time_start, 1)) + 'sec', (0,0,0), font=font)
 
     image_img_numpy = np.asarray(image_img)
 
