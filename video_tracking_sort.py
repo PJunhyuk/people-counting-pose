@@ -190,10 +190,11 @@ for i in range(0, video_frame_number):
 
     for d in track_bbs_ids:
         draw.rectangle([d[0], d[1], d[2], d[3]], outline='red')
-        print(d[4])
-        total_people.append(d[4])
+        draw.text((d[0], d[1]), str(d[4]), (255,0,0), font=font)
+        if not d[4] in total_people:
+            total_people.append(d[4])
 
-    print('total_people: ' + str(len(total_people)))
+    print(total_people)
     print('people_real_num: ' + str(people_real_num))
     print('len(track_bbs_ids): ' + str(len(track_bbs_ids)))
     print('Frame: ' + str(i) + "/" + str(video_frame_number))
