@@ -213,7 +213,7 @@ for i in range(0, video_frame_number):
 
 video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
 video_output_name = video_name.split('.')[0]
-video_pose.write_videofile("testset/" + video_output_name + "_tracking." + video_type, fps=video.fps, progress_bar=False)
+video_pose.write_videofile("testset/" + video_output_name + "_tracking_t" + str(point_min) + "." + video_type, fps=video.fps, progress_bar=False)
 
 print("Time(s): " + str(time.time() - time_start))
 print("Output video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
