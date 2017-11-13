@@ -69,6 +69,7 @@ parser = ap.ArgumentParser()
 parser.add_argument('-f', "--videoFile", help="Path to Video File")
 parser.add_argument('-w', "--videoWidth", help="Width of Output Video")
 parser.add_argument('-o', "--videoType", help="Extension of Output Video")
+parser.add_argument('-t', "--poseThreshold", help="Threshold of pose-tensorflow")
 
 args = vars(parser.parse_args())
 
@@ -91,6 +92,11 @@ else:
     video_type = "mp4"
 print("Output video type: " + video_type)
 
+if args["poseThreshold"] is not None:
+    point_min = 14
+else:
+    point_min = args["poseThreshold"]
+print("Pose Threshold: " + str(point_min))
 ##########
 ## Define some functions to mark at image
 
@@ -105,7 +111,7 @@ video_frame_ciphers = math.ceil(math.log(video_frame_number, 10)) ## ex. 720 -> 
 pose_frame_list = []
 
 point_r = 3 # radius of points
-point_min = 14 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
+# point_min = 14 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
 point_num = 17 # There are 17 points in 1 person
 
 tracking_people_count = 0
@@ -194,11 +200,12 @@ for i in range(0, video_frame_number):
         if not d[4] in total_people:
             total_people.append(d[4])
 
-    print(total_people)
     print('people_real_num: ' + str(people_real_num))
     print('len(track_bbs_ids): ' + str(len(track_bbs_ids)))
     print('Frame: ' + str(i) + "/" + str(video_frame_number))
     print('Time required: ' + str(round(time.time() - time_start, 1)) + 'sec')
+
+    draw.text((0, 0), str(total_people), (255,0,0), font=font)
 
     image_img_numpy = np.asarray(image_img)
 
