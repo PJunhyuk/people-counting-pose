@@ -179,8 +179,9 @@ for i in range(0, video_frame_number):
                     draw.ellipse(ellipse_set(person_conf_multi, people_i, point_i), fill=point_color)
                     people_x.append(person_conf_multi[people_i][point_i][0])
                     people_y.append(person_conf_multi[people_i][point_i][1])
-            dets.append([int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))])
+            dets.append([people_real_num, int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))])
 
+    print(dets)
     track_bbs_ids = mot_tracker.update(dets)
 
     ##########
@@ -188,6 +189,7 @@ for i in range(0, video_frame_number):
     for d in track_bbs_ids:
         draw.rectangle([d[0], d[1], d[2], d[3]], outline='red')
 
+    print('people_real_num: ' + str(people_real_num))
     print('len(track_bbs_ids): ' + str(len(track_bbs_ids)))
     print('Frame: ' + str(i) + "/" + str(video_frame_number))
     print('Time required: ' + str(round(time.time() - time_start, 1)) + 'sec')
