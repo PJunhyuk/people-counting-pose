@@ -179,8 +179,9 @@ for i in range(0, video_frame_number):
                     draw.ellipse(ellipse_set(person_conf_multi, people_i, point_i), fill=point_color)
                     people_x.append(person_conf_multi[people_i][point_i][0])
                     people_y.append(person_conf_multi[people_i][point_i][1])
-            dets.append([people_real_num, int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))])
+            dets.append([int(min(people_x)), int(min(people_y)), int(max(people_x)), int(max(people_y))])
 
+    dets = np.array(dets)
     print(dets)
     track_bbs_ids = mot_tracker.update(dets)
 
