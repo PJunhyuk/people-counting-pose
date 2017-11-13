@@ -93,7 +93,7 @@ else:
 print("Output video type: " + video_type)
 
 if args["poseThreshold"] is not None:
-    point_min = args["poseThreshold"] # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
+    point_min = int(args["poseThreshold"]) # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
 else:
     point_min = 14
 print("Pose Threshold: " + str(point_min))
