@@ -80,6 +80,7 @@ else:
     sys.exit(1)
 video = video_pose.read_video(video_name)
 print("Input video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
+video_output_name = video_name.split('.')[0]
 
 if args["videoWidth"] is not None:
     video_width = int(args["videoWidth"])
@@ -232,7 +233,6 @@ for i in range(0, video_frame_number):
     pose_frame_list.append(image_img_numpy)
 
 video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
-video_output_name = video_name.split('.')[0]
 video_pose.write_videofile("testset/" + video_output_name + "_tracking_t" + str(point_min) + "." + video_type, fps=video.fps, progress_bar=False)
 
 print("Time(s): " + str(time.time() - time_start))
