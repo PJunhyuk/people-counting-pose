@@ -204,6 +204,7 @@ for i in range(0, video_frame_number):
         if not d[4] in total_people:
             total_people.append(d[4])
             image_people = []
+            print([d[0], d[1], d[2], d[3]])
             for i in range(int(d[0]), int(d[2])+1):
                 image_people_temp = []
                 for j in range(int(d[1]), int(d[3])+1):
