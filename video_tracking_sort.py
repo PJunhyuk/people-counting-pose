@@ -126,6 +126,8 @@ total_people = []
 for i in range(0, video_frame_number):
     # Save i-th frame as image
     image = video.get_frame(i/video.fps)
+    print(type(image))
+    print(image)
 
     ##########
     ## By pose-tensorflow
@@ -198,8 +200,9 @@ for i in range(0, video_frame_number):
         draw.text((d[0], d[1]), str(d[4]), (255,0,0), font=font)
         if not d[4] in total_people:
             total_people.append(d[4])
-            img_people = Image.fromarray(image([d[0]:d[2]+1][d[1]:d[3]+1]))
-            img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "_p" + d[4] + ".jpg")
+            # image_people = image([d[0]:d[2]+1][d[1]:d[3]+1])
+            # img_people = Image.fromarray(image_people)
+            # img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "_p" + d[4] + ".jpg")
 
     print('people_real_num: ' + str(people_real_num))
     print('len(track_bbs_ids): ' + str(len(track_bbs_ids)))
