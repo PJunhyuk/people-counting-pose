@@ -126,8 +126,13 @@ total_people = []
 for i in range(0, video_frame_number):
     # Save i-th frame as image
     image = video.get_frame(i/video.fps)
+    image_np = np.array(image)
     print(type(image))
     print(image)
+    print(type(image_np))
+    print(image_np)
+
+    print(image[0][0][0])
 
     ##########
     ## By pose-tensorflow
