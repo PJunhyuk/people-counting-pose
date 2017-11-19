@@ -215,7 +215,7 @@ for i in range(0, video_frame_number):
             print(image_people_np)
             print(type(image_people_np))
             img_people = Image.fromarray(image_people_np)
-            img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "_p" + int(d[4]) + ".jpg")
+            img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "_p" + str(int(d[4])) + ".jpg")
             print("image saved!")
 
     print('people_real_num: ' + str(people_real_num))
