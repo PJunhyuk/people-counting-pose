@@ -130,6 +130,13 @@ for i in range(0, video_frame_number):
     # print(len(image)): 360
     # print(len(image[0])): 720
     # print(len(image[0][0])): 3
+    print(image[0][0])
+    print(image[1][1])
+    print(image[2][2])
+    print(image[3][3])
+    print(image[359][359])
+    print(image[359][719])
+    print(image[719][359])
 
     ##########
     ## By pose-tensorflow
