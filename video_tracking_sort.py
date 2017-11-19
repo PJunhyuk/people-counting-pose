@@ -126,6 +126,11 @@ total_people = []
 for i in range(0, video_frame_number):
     # Save i-th frame as image
     image = video.get_frame(i/video.fps)
+    print(image)
+    print(len(image))
+    print(image[0][0][0])
+    print(image[1][1])
+    print(image[0][1][1])
 
     ##########
     ## By pose-tensorflow
@@ -202,7 +207,7 @@ for i in range(0, video_frame_number):
             for i in range(int(d[0]), int(d[2])+1):
                 image_people_temp = []
                 for j in range(int(d[1]), int(d[3])+1):
-                    image_people_temp.append(image([0][i][j]))
+                    image_people_temp.append(image([0][j][i]))
                 image_people.append(image_people_temp)
             img_people = Image.fromarray(image_people)
             img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "_p" + int(d[4]) + ".jpg")
