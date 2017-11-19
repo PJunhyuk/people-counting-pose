@@ -128,15 +128,8 @@ for i in range(0, video_frame_number):
     image = video.get_frame(i/video.fps)
     # [x][y][z]: x = width, y = height, z = rgb(3)
     # print(len(image)): 360
-    # print(len(image[0])): 720
+    # print(len(image[0])): 640
     # print(len(image[0][0])): 3
-    print(image[0][0])
-    print(image[1][1])
-    print(image[2][2])
-    print(image[3][3])
-    print(image[359][359])
-    print(image[359][719])
-    print(image[719][359])
 
     ##########
     ## By pose-tensorflow
@@ -215,7 +208,7 @@ for i in range(0, video_frame_number):
                 for j in range(int(d[1]), int(d[3])+1):
                     image_people_temp = []
                     print([j, i])
-                    image_people_temp.append(image([j][i]))
+                    image_people_temp.append(image[j][i])
                 image_people.append(image_people_temp)
             img_people = Image.fromarray(image_people)
             img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "_p" + int(d[4]) + ".jpg")
