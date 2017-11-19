@@ -204,14 +204,19 @@ for i in range(0, video_frame_number):
         if not d[4] in total_people:
             total_people.append(d[4])
             image_people = []
-            for i in range(int(d[0]), int(d[2])+1):
+            for i in range(int(d[0]), int(d[2])+1): # x
                 image_people_temp = []
-                for j in range(int(d[1]), int(d[3])+1):
+                for j in range(int(d[1]), int(d[3])+1): # y
                     image_people_temp.append(image[j][i])
                 image_people.append(image_people_temp)
-            image_people_np = np.asarray(image_people)
+            image_people_rotate = []
+            for i in range(0, len(image[0])): # y
+                image_people_rotate_temp = []
+                for j in range(0, len(image)): # x
+                    image_people_rotate_temp.append(image_people[i][j])
+                image_people_rotate.append(image_people_rotate_temp)
+            image_people_np = np.asarray(image_people_rotate)
             img_people = Image.fromarray(image_people_np)
-            img_people = img_people.rotate(90)
             img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "_p" + str(int(d[4])) + ".jpg")
             print("image saved!")
 
