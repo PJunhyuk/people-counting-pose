@@ -199,13 +199,13 @@ for i in range(0, video_frame_number):
         if not d[4] in total_people:
             total_people.append(d[4])
             image_people = []
-            for i in range(d[0], d[2]+1):
+            for i in range(int(d[0]), int(d[2])+1):
                 image_people_temp = []
-                for j in range(d[1], d[3]+1):
+                for j in range(int(d[1]), int(d[3])+1):
                     image_people_temp.append(image([0][i][j]))
                 image_people.append(image_people_temp)
             img_people = Image.fromarray(image_people)
-            img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "_p" + d[4] + ".jpg")
+            img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "_p" + int(d[4]) + ".jpg")
 
     print('people_real_num: ' + str(people_real_num))
     print('len(track_bbs_ids): ' + str(len(track_bbs_ids)))
