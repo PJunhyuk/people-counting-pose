@@ -206,10 +206,13 @@ for i in range(0, video_frame_number):
             for i in range(int(d[0]), int(d[2])+1):
                 image_people_temp = []
                 for j in range(int(d[1]), int(d[3])+1):
-                    image_people_temp = []
-                    print([j, i])
                     image_people_temp.append(image[j][i])
                 image_people.append(image_people_temp)
+            print(image_people)
+            print(type(image_people))
+            image_people_np = np.asarray(image_people)
+            print(image_people_np)
+            print(type(image_people_np))
             img_people = Image.fromarray(image_people)
             img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "_p" + int(d[4]) + ".jpg")
             print("image saved!")
