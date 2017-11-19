@@ -213,7 +213,7 @@ for i in range(0, video_frame_number):
             image_people_np = np.asarray(image_people)
             print(image_people_np)
             print(type(image_people_np))
-            img_people = Image.fromarray(image_people)
+            img_people = Image.fromarray(image_people_np)
             img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "_p" + int(d[4]) + ".jpg")
             print("image saved!")
 
