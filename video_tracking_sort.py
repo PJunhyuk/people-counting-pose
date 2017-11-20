@@ -212,7 +212,8 @@ for i in range(0, video_frame_number):
             image_people_np = np.asarray(image_people)
             image_people_np_rotate = np.transpose(image_people_np, (1, 0, 2))
             img_people = Image.fromarray(image_people_np_rotate)
-            os.mkdir("testset/" + video_output_name + "_tracking_t" + str(point_min))
+            if not (os.path.isdir("testset/" + video_output_name + "_tracking_t" + str(point_min))):
+                os.mkdir("testset/" + video_output_name + "_tracking_t" + str(point_min))
             img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "/p" + str(int(d[4])) + ".jpg")
 
     print('people_real_num: ' + str(people_real_num))
