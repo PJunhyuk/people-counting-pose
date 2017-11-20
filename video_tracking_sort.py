@@ -126,6 +126,8 @@ tracker = []
 total_people = []
 image_people_list = []
 PSNR_list = []
+same_person_list = []
+PSNR_threshold = 11.5
 
 for i in range(0, video_frame_number):
     # Save i-th frame as image
@@ -221,11 +223,21 @@ for i in range(0, video_frame_number):
             if len(image_people_list) == 0:
                 image_people_list.append([image_people_np_rotate, d[4]])
             else:
+                PSNR_max = 0
                 for i in range(0, len(image_people_list)):
                     image_people_ref = imresize(image_people_list[i][0], (len(image_people_np_rotate), len(image_people_np_rotate[0])), 'bilinear', 'RGB')
                     image_people_psnr = compare_psnr(image_people_ref, image_people_np_rotate)
                     print("PSNR btw " + str(int(d[4])) + " & " + str(int(image_people_list[i][1])) + " = " + str(image_people_psnr))
                     PSNR_list.append([int(d[4]), int(image_people_list[i][1]), str(image_people_psnr)])
+                    PSNR_max = image_people_psnr
+                    if image_people_psnr > PSNR_max:
+                        PSNR_max = image_people_psnr
+                if float(PSNR_max) > PSNR_threshold: # If PSNR_max is bigger then PSNR_threshold, we assume they are same one
+                    if len(same_person_list) == 0:
+                        same_person_list.append([d[4]])
+                    for i in range(0, len(same_person_list)):
+                        if d[4] in same_person_list[i]:
+                            same_person_list[i].append(d[4])
                 image_people_list.append([image_people_np_rotate, d[4]])
 
     print('people_real_num: ' + str(people_real_num))
@@ -244,6 +256,8 @@ for i in range(0, video_frame_number):
 
 for i in range(0, len(PSNR_list)):
     print(PSNR_list[i])
+for i in range(0, len(same_person_list)):
+    print(same_person_list[i])
 
 video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
 video_pose.write_videofile("testset/" + video_output_name + "_tracking_t" + str(point_min) + "." + video_type, fps=video.fps, progress_bar=False)
