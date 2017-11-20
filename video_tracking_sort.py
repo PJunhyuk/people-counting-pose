@@ -242,7 +242,8 @@ for i in range(0, video_frame_number):
 
     pose_frame_list.append(image_img_numpy)
 
-print(PSNR_list)
+for i in range(0, len(PSNR_list)):
+    print(PSNR_list[i])
 
 video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
 video_pose.write_videofile("testset/" + video_output_name + "_tracking_t" + str(point_min) + "." + video_type, fps=video.fps, progress_bar=False)
