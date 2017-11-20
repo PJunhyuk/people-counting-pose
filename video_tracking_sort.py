@@ -223,8 +223,8 @@ for i in range(0, video_frame_number):
                 for i in range(0, len(image_people_list)):
                     image_people_ref = imresize(image_people_list[i][0], (len(image_people_np_rotate), len(image_people_np_rotate[0])), 'bilinear', 'RGB')
                     image_people_psnr = compare_psnr(image_people_ref, image_people_np_rotate)
-                    print("PSNR with" + str(int(d[4])) + ": " + str(image_people_psnr))
-                image_people_list.append(img_people_np_rotate)
+                    print("PSNR btw " + str(int(d[4])) + " & " + str(int(image_people_list[i][1])) + " = " + str(image_people_psnr))
+                image_people_list.append(image_people_np_rotate)
 
     print('people_real_num: ' + str(people_real_num))
     print('len(track_bbs_ids): ' + str(len(track_bbs_ids)))
