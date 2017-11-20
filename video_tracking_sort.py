@@ -231,7 +231,6 @@ for i in range(0, video_frame_number):
                     image_people_psnr = compare_psnr(image_people_ref, image_people_np_rotate)
                     print("PSNR btw " + str(int(d[4])) + " & " + str(int(image_people_list[i][1])) + " = " + str(image_people_psnr))
                     PSNR_list.append([int(d[4]), int(image_people_list[i][1]), str(image_people_psnr)])
-                    PSNR_max = float(image_people_psnr)
                     if float(image_people_psnr) > PSNR_max:
                         PSNR_max = float(image_people_psnr)
                         PSNR_max_index = int(image_people_list[i][1])
