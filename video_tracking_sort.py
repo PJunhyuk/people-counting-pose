@@ -210,12 +210,9 @@ for i in range(0, video_frame_number):
                     image_people_temp.append(image[j][i])
                 image_people.append(image_people_temp)
             image_people_np = np.asarray(image_people)
-            print(image_people_np.shape)
             image_people_np_rotate = np.transpose(image_people_np, (1, 0, 2))
-            print(image_people_np_rotate.shape)
             img_people = Image.fromarray(image_people_np_rotate)
-            img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "_p" + str(int(d[4])) + ".jpg")
-            print("image saved!")
+            img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "/p" + str(int(d[4])) + ".jpg")
 
     print('people_real_num: ' + str(people_real_num))
     print('len(track_bbs_ids): ' + str(len(track_bbs_ids)))
