@@ -225,13 +225,13 @@ for i in range(0, video_frame_number):
                 same_person_list.append([d[4]])
             else:
                 PSNR_max = 0.0
+                PSNR_max_index = 0
                 for i in range(0, len(image_people_list)):
                     image_people_ref = imresize(image_people_list[i][0], (len(image_people_np_rotate), len(image_people_np_rotate[0])), 'bilinear', 'RGB')
                     image_people_psnr = compare_psnr(image_people_ref, image_people_np_rotate)
                     print("PSNR btw " + str(int(d[4])) + " & " + str(int(image_people_list[i][1])) + " = " + str(image_people_psnr))
                     PSNR_list.append([int(d[4]), int(image_people_list[i][1]), str(image_people_psnr)])
                     PSNR_max = float(image_people_psnr)
-                    PSNR_max_index = 0
                     if float(image_people_psnr) > PSNR_max:
                         PSNR_max = float(image_people_psnr)
                         PSNR_max_index = image_people_list[i][1]
