@@ -235,9 +235,12 @@ for i in range(0, video_frame_number):
                 if float(PSNR_max) > PSNR_threshold: # If PSNR_max is bigger then PSNR_threshold, we assume they are same one
                     if len(same_person_list) == 0:
                         same_person_list.append([d[4]])
-                    for i in range(0, len(same_person_list)):
-                        if d[4] in same_person_list[i]:
-                            same_person_list[i].append(d[4])
+                    else:
+                        for i in range(0, len(same_person_list)):
+                            if d[4] in same_person_list[i]:
+                                same_person_list[i].append(d[4])
+                            else:
+                                same_person_list.append([d[4]])
                 image_people_list.append([image_people_np_rotate, d[4]])
 
     print('people_real_num: ' + str(people_real_num))
