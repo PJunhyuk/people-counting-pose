@@ -16,7 +16,8 @@ import numpy as np
 
 sys.path.append(os.path.dirname(__file__) + "/../")
 
-from scipy.misc import imread, imsave
+from scipy.misc import imread, imsave, imresize
+from skimage.measure import compare_psnr
 
 from config import load_config
 from dataset.factory import create as create_dataset
@@ -123,6 +124,7 @@ tracker_len_prev = 0
 target_points = [] # format: [(minx, miny, maxx, maxy), (minx, miny, maxx, maxy) ... ]
 tracker = []
 total_people = []
+image_people_list = []
 
 for i in range(0, video_frame_number):
     # Save i-th frame as image
@@ -215,6 +217,14 @@ for i in range(0, video_frame_number):
             if not (os.path.isdir("testset/" + video_output_name + "_tracking_t" + str(point_min))):
                 os.mkdir("testset/" + video_output_name + "_tracking_t" + str(point_min))
             img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "/p" + str(int(d[4])) + ".jpg")
+            if len(image_people_list) == 0:
+                image_people_list.append([img_people_np_rotate, d[4]])
+            else:
+                for i in range(0, len(image_people_list)):
+                    image_people_ref = imresize(image_people_list[i][0], (len(image_people_np_rotate), len(image_people_np_rotate[0])), 'bilinear', 'RGB')
+                    image_people_psnr = compare_psnr(image_people_ref, image_people_np_rotate)
+                    print("PSNR with" + str(int(d[4])) + ": " + str(image_people_psnr))
+                image_people_list.append(img_people_np_rotate)
 
     print('people_real_num: ' + str(people_real_num))
     print('len(track_bbs_ids): ' + str(len(track_bbs_ids)))
