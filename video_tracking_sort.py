@@ -234,7 +234,7 @@ for i in range(0, video_frame_number):
                     PSNR_max = float(image_people_psnr)
                     if float(image_people_psnr) > PSNR_max:
                         PSNR_max = float(image_people_psnr)
-                        PSNR_max_index = image_people_list[i][1]
+                        PSNR_max_index = int(image_people_list[i][1])
                     print(PSNR_max)
                     print(PSNR_max_index)
                 if PSNR_max > PSNR_threshold: # If PSNR_max is bigger then PSNR_threshold, we assume they are same one
