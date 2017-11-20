@@ -218,7 +218,7 @@ for i in range(0, video_frame_number):
                 os.mkdir("testset/" + video_output_name + "_tracking_t" + str(point_min))
             img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "/p" + str(int(d[4])) + ".jpg")
             if len(image_people_list) == 0:
-                image_people_list.append([img_people_np_rotate, d[4]])
+                image_people_list.append([image_people_np_rotate, d[4]])
             else:
                 for i in range(0, len(image_people_list)):
                     image_people_ref = imresize(image_people_list[i][0], (len(image_people_np_rotate), len(image_people_np_rotate[0])), 'bilinear', 'RGB')
