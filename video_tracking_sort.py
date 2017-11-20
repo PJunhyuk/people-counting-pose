@@ -125,6 +125,7 @@ target_points = [] # format: [(minx, miny, maxx, maxy), (minx, miny, maxx, maxy)
 tracker = []
 total_people = []
 image_people_list = []
+PSNR_list = []
 
 for i in range(0, video_frame_number):
     # Save i-th frame as image
@@ -224,7 +225,8 @@ for i in range(0, video_frame_number):
                     image_people_ref = imresize(image_people_list[i][0], (len(image_people_np_rotate), len(image_people_np_rotate[0])), 'bilinear', 'RGB')
                     image_people_psnr = compare_psnr(image_people_ref, image_people_np_rotate)
                     print("PSNR btw " + str(int(d[4])) + " & " + str(int(image_people_list[i][1])) + " = " + str(image_people_psnr))
-                image_people_list.append(image_people_np_rotate)
+                    PSNR_list.append([int(d[4]), int(image_people_list[i][1]), str(image_people_psnr)])
+                image_people_list.append([image_people_np_rotate, d[4]])
 
     print('people_real_num: ' + str(people_real_num))
     print('len(track_bbs_ids): ' + str(len(track_bbs_ids)))
@@ -239,6 +241,8 @@ for i in range(0, video_frame_number):
     image_img_numpy = np.asarray(image_img)
 
     pose_frame_list.append(image_img_numpy)
+
+print(PSNR_list)
 
 video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
 video_pose.write_videofile("testset/" + video_output_name + "_tracking_t" + str(point_min) + "." + video_type, fps=video.fps, progress_bar=False)
