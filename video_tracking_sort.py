@@ -230,17 +230,16 @@ for i in range(0, video_frame_number):
                     print("PSNR btw " + str(int(d[4])) + " & " + str(int(image_people_list[i][1])) + " = " + str(image_people_psnr))
                     PSNR_list.append([int(d[4]), int(image_people_list[i][1]), str(image_people_psnr)])
                     PSNR_max = image_people_psnr
+                    PSNR_max_index = 0
                     if image_people_psnr > PSNR_max:
                         PSNR_max = image_people_psnr
+                        PSNR_max_index = i
                 if float(PSNR_max) > PSNR_threshold: # If PSNR_max is bigger then PSNR_threshold, we assume they are same one
-                    if len(same_person_list) == 0:
-                        same_person_list.append([d[4]])
-                    else:
-                        for i in range(0, len(same_person_list)):
-                            if d[4] in same_person_list[i]:
-                                same_person_list[i].append(d[4])
-                            else:
-                                same_person_list.append([d[4]])
+                    for i in range(0, len(same_person_list)):
+                        if PSNR_max_index in same_person_list[i]:
+                            same_person_list[i].append(d[4])
+                else:
+                    same_person_list.append([d[4]])
                 image_people_list.append([image_people_np_rotate, d[4]])
 
     print('people_real_num: ' + str(people_real_num))
