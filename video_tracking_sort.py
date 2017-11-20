@@ -210,10 +210,13 @@ for i in range(0, video_frame_number):
                     image_people_temp.append(image[j][i])
                 image_people.append(image_people_temp)
             image_people_rotate = []
-            for i in range(0, len(image[0])): # y
+            print(len(image_people))
+            print(len(image_people[0]))
+            print(image_people)
+            for i in range(0, len(image_people)): # x
                 image_people_rotate_temp = []
-                for j in range(0, len(image)): # x
-                    image_people_rotate_temp.append(image_people[i][j])
+                for j in range(0, len(image_people[0])): # y
+                    image_people_rotate_temp.append(image_people[j][i])
                 image_people_rotate.append(image_people_rotate_temp)
             image_people_np = np.asarray(image_people_rotate)
             img_people = Image.fromarray(image_people_np)
