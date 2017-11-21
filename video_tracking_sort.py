@@ -129,9 +129,9 @@ PSNR_list = []
 same_person_list = []
 PSNR_threshold = 11.5
 
-for i in range(0, video_frame_number):
-    # Save i-th frame as image
-    image = video.get_frame(i/video.fps)
+for frame_index in range(0, video_frame_number):
+    # Save frame_index-th frame as image
+    image = video.get_frame(frame_index/video.fps)
     # [x][y][z]: x = width, y = height, z = rgb(3)
     # print(len(image)): 360
     # print(len(image[0])): 640
@@ -258,12 +258,12 @@ for i in range(0, video_frame_number):
 
     print('people_real_num: ' + str(people_real_num))
     print('len(track_bbs_ids): ' + str(len(track_bbs_ids)))
-    print('Frame: ' + str(i) + "/" + str(video_frame_number))
+    print('Frame: ' + str(frame_index) + "/" + str(video_frame_number))
     print('Time required: ' + str(round(time.time() - time_start, 1)) + 'sec')
 
     draw.text((0, 0), 'total_people_list: ' + str(total_people), (0,0,0), font=font)
     draw.text((0, 18), 'total_people: ' + str(len(total_people)), (0,0,0), font=font)
-    draw.text((0, 36), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
+    draw.text((0, 36), 'Frame: ' + str(frame_index) + '/' + str(video_frame_number), (0,0,0), font=font)
     draw.text((0, 54), 'Total time required: ' + str(round(time.time() - time_start, 1)) + 'sec', (0,0,0), font=font)
 
     image_img_numpy = np.asarray(image_img)
