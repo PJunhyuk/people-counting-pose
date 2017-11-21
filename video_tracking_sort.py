@@ -242,10 +242,10 @@ for frame_index in range(0, video_frame_number):
 
             if len(image_people_list) == 0:
                 image_people_list.append([image_people_np_rotate, d[4]])
-                same_person_list.append([d[4]])
-
                 image_people_up_list.append([image_people_np_up, d[4]])
                 image_people_down_list.append([image_people_np_down, d[4]])
+
+                same_person_list.append([d[4]])
             else:
                 PSNR_max = 0.0
                 PSNR_up_max = 0.0
@@ -267,6 +267,10 @@ for frame_index in range(0, video_frame_number):
                     print(PSNR_max_index)
 
                     #### - upper body
+                    print(image_people_up_list)
+                    print(image_people_up_list.shape)
+                    print(image_people_np_up)
+                    print(image_people_np_up.shape)
                     image_people_up_ref = imresize(image_people_up_list[i][0], (len(image_people_np_up), len(image_people_np_up[0])), 'bilinear', 'RGB')
                     image_people_up_psnr = compare_psnr(image_people_up_ref, image_people_np_up)
                     PSNR_up_list.append([int(d[4]), int(image_people_up_list[i][1]), str(image_people_up_psnr)])
