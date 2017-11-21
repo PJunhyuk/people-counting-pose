@@ -268,7 +268,7 @@ for frame_index in range(0, video_frame_number):
 
                     #### - upper body
                     print(image_people_up_list)
-                    print(image_people_up_list.shape)
+                    print(image_people_up_list[0][0].shape)
                     print(image_people_np_up)
                     print(image_people_np_up.shape)
                     image_people_up_ref = imresize(image_people_up_list[i][0], (len(image_people_np_up), len(image_people_np_up[0])), 'bilinear', 'RGB')
