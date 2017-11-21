@@ -128,6 +128,10 @@ image_people_list = []
 PSNR_list = []
 same_person_list = []
 PSNR_threshold = 11.5
+PSNR_up_list = []
+PSNR_down_list = []
+image_people_up_list = []
+image_people_down_list = []
 
 for frame_index in range(0, video_frame_number):
     # Save frame_index-th frame as image
@@ -217,6 +221,8 @@ for frame_index in range(0, video_frame_number):
             image_people_np = np.asarray(image_people)
             image_people_np_rotate = np.transpose(image_people_np, (1, 0, 2))
 
+            ### save images
+            #### - whole body
             img_people = Image.fromarray(image_people_np_rotate)
             if not (os.path.isdir("testset/" + video_output_name + "_tracking_t" + str(point_min))):
                 os.mkdir("testset/" + video_output_name + "_tracking_t" + str(point_min))
@@ -224,10 +230,12 @@ for frame_index in range(0, video_frame_number):
 
             image_people_np_up_height = int(image_people_np_rotate.shape[0] / 2)
 
+            #### - upper body
             image_people_np_up = image_people_np_rotate[0:image_people_np_up_height]
             img_people_up = Image.fromarray(image_people_np_up)
             img_people_up.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "/p" + str(int(d[4])) + "_up.jpg")
 
+            #### - lower body
             image_people_np_down = image_people_np_rotate[image_people_np_up_height:]
             img_people_down = Image.fromarray(image_people_np_down)
             img_people_down.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "/p" + str(int(d[4])) + "_down.jpg")
@@ -235,19 +243,49 @@ for frame_index in range(0, video_frame_number):
             if len(image_people_list) == 0:
                 image_people_list.append([image_people_np_rotate, d[4]])
                 same_person_list.append([d[4]])
+
+                image_people_up_list.append([image_people_np_up, d[4]])
+                image_people_down_list.append([image_people_np_down, d[4]])
             else:
                 PSNR_max = 0.0
+                PSNR_up_max = 0.0
+                PSNR_down_max = 0.0
+
                 PSNR_max_index = 0
+                PSNR_up_max_index = 0
+                PSNR_down_max_index = 0
                 for i in range(0, len(image_people_list)):
+                    ### calculate PSNR and find max PSNR
+                    #### - whole body
                     image_people_ref = imresize(image_people_list[i][0], (len(image_people_np_rotate), len(image_people_np_rotate[0])), 'bilinear', 'RGB')
                     image_people_psnr = compare_psnr(image_people_ref, image_people_np_rotate)
-                    print("PSNR btw " + str(int(d[4])) + " & " + str(int(image_people_list[i][1])) + " = " + str(image_people_psnr))
                     PSNR_list.append([int(d[4]), int(image_people_list[i][1]), str(image_people_psnr)])
                     if float(image_people_psnr) > PSNR_max:
                         PSNR_max = float(image_people_psnr)
                         PSNR_max_index = int(image_people_list[i][1])
                     print(PSNR_max)
                     print(PSNR_max_index)
+
+                    #### - upper body
+                    image_people_up_ref = imresize(image_people_up_list[i][0], (len(image_people_np_up), len(image_people_np_up[0])), 'bilinear', 'RGB')
+                    image_people_up_psnr = compare_psnr(image_people_up_ref, image_people_np_up)
+                    PSNR_up_list.append([int(d[4]), int(image_people_up_list[i][1]), str(image_people_up_psnr)])
+                    if float(image_people_up_psnr) > PSNR_up_max:
+                        PSNR_up_max = float(image_people_up_psnr)
+                        PSNR_up_max_index = int(image_people_up_list[i][1])
+                    print(PSNR_up_max)
+                    print(PSNR_up_max_index)
+
+                    #### - lower body
+                    image_people_down_ref = imresize(image_people_down_list[i][0], (len(image_people_np_down), len(image_people_np_down[0])), 'bilinear', 'RGB')
+                    image_people_down_psnr = compare_psnr(image_people_down_ref, image_people_np_down)
+                    PSNR_down_list.append([int(d[4]), int(image_people_down_list[i][1]), str(image_people_down_psnr)])
+                    if float(image_people_down_psnr) > PSNR_down_max:
+                        PSNR_down_max = float(image_people_down_psnr)
+                        PSNR_down_max_index = int(image_people_down_list[i][1])
+                    print(PSNR_down_max)
+                    print(PSNR_down_max_index)
+
                 if PSNR_max > PSNR_threshold: # If PSNR_max is bigger then PSNR_threshold, we assume they are same one
                     for i in range(0, len(same_person_list)):
                         if PSNR_max_index in same_person_list[i]:
@@ -270,8 +308,16 @@ for frame_index in range(0, video_frame_number):
 
     pose_frame_list.append(image_img_numpy)
 
+print("PSNR_list")
 for i in range(0, len(PSNR_list)):
     print(PSNR_list[i])
+print("PSNR_up_list")
+for i in range(0, len(PSNR_up_list)):
+    print(PSNR_up_list[i])
+print("PSNR_down_list")
+for i in range(0, len(PSNR_down_list)):
+    print(PSNR_down_list[i])
+
 for i in range(0, len(same_person_list)):
     print(same_person_list[i])
 
