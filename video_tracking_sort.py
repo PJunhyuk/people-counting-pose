@@ -216,10 +216,22 @@ for i in range(0, video_frame_number):
                 image_people.append(image_people_temp)
             image_people_np = np.asarray(image_people)
             image_people_np_rotate = np.transpose(image_people_np, (1, 0, 2))
+
             img_people = Image.fromarray(image_people_np_rotate)
             if not (os.path.isdir("testset/" + video_output_name + "_tracking_t" + str(point_min))):
                 os.mkdir("testset/" + video_output_name + "_tracking_t" + str(point_min))
             img_people.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "/p" + str(int(d[4])) + ".jpg")
+
+            image_people_np_up_height = int(image_people_np_rotate.shape[0] / 2)
+
+            image_people_np_up = image_people_np_rotate[0:image_people_np_up_height]
+            img_people_up = Image.fromarray(image_people_np_up)
+            img_people_up.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "/p" + str(int(d[4])) + "_up.jpg")
+
+            image_people_np_down = image_people_np_rotate[image_people_np_up_height:]
+            img_people_down = Image.fromarray(image_people_np_down)
+            img_people_down.save("testset/" + video_output_name + "_tracking_t" + str(point_min) + "/p" + str(int(d[4])) + "_down.jpg")
+
             if len(image_people_list) == 0:
                 image_people_list.append([image_people_np_rotate, d[4]])
                 same_person_list.append([d[4]])
