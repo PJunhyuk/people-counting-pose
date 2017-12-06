@@ -309,6 +309,8 @@ for frame_index in range(0, video_frame_number):
 
     pose_frame_list.append(image_img_numpy)
 
+    image_img.save("testset/" + video_output_name + "/" + frame_index + "_" + video.fps + "_" + len(total_people) + ".jpg", "JPG")
+
 print("PSNR_list")
 for i in range(0, len(PSNR_list)):
     print(PSNR_list[i])
