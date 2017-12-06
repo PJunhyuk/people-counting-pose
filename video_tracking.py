@@ -235,7 +235,7 @@ for i in range(0, video_frame_number):
 
     pose_frame_list.append(image_img_numpy)
 
-    image_name = "testset/" + video_output_name + "/" + str(i) + "_" + str(video.fps) + "_" + str(tracking_people_count) + ".jpg"
+    image_name = "testset/" + video_output_name + "/" + str(i) + "_" + str(int(video.fps)) + "_" + str(tracking_people_count) + ".jpg"
     print(image_name)
     image_img.save(image_name, "JPG")
 
