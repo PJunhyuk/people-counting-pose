@@ -69,6 +69,7 @@ if args["videoFile"] is not None:
 else:
     print("You have to input videoFile name")
     sys.exit(1)
+video_output_name = video_name.split('.')[0]
 video = video_pose.read_video(video_name)
 print("Input video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
 
@@ -231,8 +232,9 @@ for i in range(0, video_frame_number):
 
     pose_frame_list.append(image_img_numpy)
 
+    image_img.save("testset/" + video_output_name + "/" + i + "_" + video.fps + "_" + tracking_people_count + ".jpg", "JPG")
+
 video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
-video_output_name = video_name.split('.')[0]
 video_pose.write_videofile("testset/" + video_output_name + "_tracking." + video_type, fps=video.fps, progress_bar=False)
 
 print("Time(s): " + str(time.time() - time_start))
