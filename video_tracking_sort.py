@@ -133,6 +133,9 @@ PSNR_down_list = []
 image_people_up_list = []
 image_people_down_list = []
 
+if not (os.path.isdir("testset/" + video_output_name)):
+    os.mkdir("testset/" + video_output_name)
+
 for frame_index in range(0, video_frame_number):
     # Save frame_index-th frame as image
     image = video.get_frame(frame_index/video.fps)
