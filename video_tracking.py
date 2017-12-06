@@ -236,7 +236,7 @@ for i in range(0, video_frame_number):
         os.mkdir("testset/" + video_output_name)
     image_name = "testset/" + video_output_name + "/" + str(i) + "_" + str(int(video.fps)) + "_" + str(tracking_people_count) + ".jpg"
     print(image_name)
-    image_img.save(image_name, "JPG")
+    image_img.save(image_name)
 
 video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
 video_pose.write_videofile("testset/" + video_output_name + "_tracking." + video_type, fps=video.fps, progress_bar=False)
