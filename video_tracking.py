@@ -234,7 +234,7 @@ for i in range(0, video_frame_number):
 
     if not (os.path.isdir("testset/" + video_output_name)):
         os.mkdir("testset/" + video_output_name)
-    image_name = "testset/" + video_output_name + "/" + i.zfill(10) + "_" + str(int(video.fps)) + "_" + str(len(tracker)) + ".jpg"
+    image_name = "testset/" + video_output_name + "/" + str(i).zfill(10) + "_" + str(int(video.fps)) + "_" + str(len(tracker)) + ".jpg"
     print(image_name)
     image_img.save(image_name)
 
