@@ -110,6 +110,9 @@ tracker_len_prev = 0
 target_points = [] # format: [(minx, miny, maxx, maxy), (minx, miny, maxx, maxy) ... ]
 tracker = []
 
+if not (os.path.isdir("testset/" + video_output_name)):
+    os.mkdir("testset/" + video_output_name)
+
 for i in range(0, video_frame_number):
     # Save i-th frame as image
     image = video.get_frame(i/video.fps)
