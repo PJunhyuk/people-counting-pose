@@ -232,7 +232,7 @@ for i in range(0, video_frame_number):
 
     pose_frame_list.append(image_img_numpy)
 
-    image_img.save("testset/" + video_output_name + "/" + i + "_" + video.fps + "_" + tracking_people_count + ".jpg", "JPG")
+    image_img.save("testset/" + video_output_name + "/" + str(i) + "_" + str(video.fps) + "_" + str(tracking_people_count) + ".jpg", "JPG")
 
 video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
 video_pose.write_videofile("testset/" + video_output_name + "_tracking." + video_type, fps=video.fps, progress_bar=False)
