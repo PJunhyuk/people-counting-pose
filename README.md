@@ -1,5 +1,8 @@
 # ODIN: People counting and classification in videos based on pose estimation
 
+## Preview
+[![Odin: Video People Counter](http://img.youtube.com/vi/5lSUhCjgD7g/0.jpg)](http://www.youtube.com/watch?v=5lSUhCjgD7g "Odin: Video People Counter")
+
 ## Usage
 
 Install [Docker](https://docker.com) and [Kitematic](https://kitematic.com/)
