@@ -33,8 +33,9 @@ draw_multi = PersonDraw()
 sess, inputs, outputs = predict.setup_pose_prediction(cfg)
 
 # Read image from file
-file_name = sys.argv[1] ## example: test_single_03
-file_name_input = 'testset/' + file_name + '.png'
+file_name_ext = sys.argv[1] ## example: test_single_03.png
+file_name = file_name_ext.split('.')[0] ## example: test_single_03
+file_name_input = 'testset/' + file_name_ext
 image = imread(file_name_input, mode='RGB')
 
 image_batch = data_to_input(image)
