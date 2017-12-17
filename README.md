@@ -1,10 +1,12 @@
-<img src="/images/Odin_squared.png" width="200">
+<img src="/samples/Odin_squared.png" width="200">
 
 # Odin
 ### People counting and classification in videos based on pose estimation
 
 ## Demo
-[![Odin: Video People Counter](http://img.youtube.com/vi/5lSUhCjgD7g/0.jpg)](http://www.youtube.com/watch?v=5lSUhCjgD7g "Odin: Video People Counter")
+<img src="/samples/sample_results.gif" width="600">  
+
+[Demo on YouTube](http://www.youtube.com/watch?v=5lSUhCjgD7g)
 
 ## Usage
 
