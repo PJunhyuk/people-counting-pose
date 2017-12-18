@@ -125,6 +125,11 @@ for i in range(0, video_frame_number):
     # Prepare saving image with points of pose
     draw = ImageDraw.Draw(image_img)
 
+    people_num = 0
+
+    people_num = person_conf_multi.size / (point_num * 2)
+    people_num = int(people_num)
+
     for people_i in range(0, people_num):
         point_color_r = random.randrange(0, 256)
         point_color_g = random.randrange(0, 256)
@@ -144,7 +149,6 @@ for i in range(0, video_frame_number):
                 point_list.append(point_i)
 
         if point_count >= point_min:
-            people_real_num = people_real_num + 1
             for point_i in range(0, point_num):
                 if person_conf_multi[people_i][point_i][0] + person_conf_multi[people_i][point_i][1] != 0: # If coordinates of point is (0, 0) == meaningless data
                     draw.ellipse(ellipse_set(person_conf_multi, people_i, point_i), fill=point_color)
