@@ -94,6 +94,8 @@ def ellipse_set(person_conf_multi, people_i, point_i):
 video_frame_number = int(video.duration * video.fps) ## duration: second / fps: frame per second
 video_frame_ciphers = math.ceil(math.log(video_frame_number, 10)) ## ex. 720 -> 3
 
+pose_frame_list = []
+
 point_r = 3 # radius of points
 point_min = 14 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
 point_num = 17 # There are 17 points in 1 person
