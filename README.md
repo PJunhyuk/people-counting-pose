@@ -38,11 +38,22 @@ $ docker run -it --name odin jgravity/tensorflow-opencv:odin bin/bash
 ```
 > Default route is ```/people-counting-classification/testset```, and you have to drop ```testset/``` for ```{video_file_name}```
 
+#### Just get pose of people
+```
+# python video_pose.py -f '{video_file_name}'
+```
+> Qualified supporting video type: mov, mp4
+
 #### Tracking people
 ```
 # python video_tracking.py -f '{video_file_name}'
 ```
 > Qualified supporting video type: mov, mp4
+
+###### Arguments
+> -f, --videoFile = Path to Video File  
+> -w, --videoWidth = Width of Output Video  
+> -o, --videoType = Extension of Output Video
 
 ## Dependencies
 
