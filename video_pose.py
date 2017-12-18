@@ -133,9 +133,12 @@ for i in range(0, video_frame_number):
     people_num = int(people_num)
 
     for people_i in range(0, people_num):
-        point_color_r = random.randrange(0, 256)
-        point_color_g = random.randrange(0, 256)
-        point_color_b = random.randrange(0, 256)
+        # point_color_r = random.randrange(0, 256)
+        # point_color_g = random.randrange(0, 256)
+        # point_color_b = random.randrange(0, 256)
+        point_color_r = 255
+        point_color_g = 0
+        point_color_b = 0
         point_color = (point_color_r, point_color_g, point_color_b, 255)
         point_list = []
         point_count = 0
