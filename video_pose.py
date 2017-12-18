@@ -1,291 +1,163 @@
+## Import the required modules
+# Check time required
+import time
+time_start = time.time()
+
 import sys
 import os
+import argparse as ap
 
 import math
 
 import imageio
 from moviepy.editor import *
 
-import time
+import numpy as np
 
-def read_video(video_name):
-    # Read video from file
-    video_name_input = 'testset/' + video_name
-    video = VideoFileClip(video_name_input)
-    return video
+sys.path.append(os.path.dirname(__file__) + "/../")
 
-def video2frame(video_name):
-    video = read_video(video_name)
+from scipy.misc import imread, imsave
 
-    video_frame_number = int(video.duration * video.fps) ## duration: second / fps: frame per second
-    video_frame_ciphers = math.ceil(math.log(video_frame_number, 10)) ## ex. 720 -> 3
+from config import load_config
+from dataset.factory import create as create_dataset
+from nnet import predict
+from util import visualize
+from dataset.pose_dataset import data_to_input
 
-    if not os.path.exists('testset/' + video_name):
-        os.makedirs('testset/' + video_name)
+from multiperson.detections import extract_detections
+from multiperson.predict import SpatialModel, eval_graph, get_person_conf_multicut
+from multiperson.visualize import PersonDraw, visualize_detections
 
-    for i in range(0, video_frame_number):
-        video.save_frame('testset/' + video_name + '/frame_' + str(i).zfill(video_frame_ciphers) + '.jpg', i/video.fps)
+import matplotlib.pyplot as plt
 
-def video2poseframe(video_name):
-    import numpy as np
+from PIL import Image, ImageDraw, ImageFont
+font = ImageFont.truetype("./font/NotoSans-Bold.ttf", 12)
 
-    sys.path.append(os.path.dirname(__file__) + "/../")
+import random
 
-    from scipy.misc import imread, imsave
+####################
 
-    from config import load_config
-    from dataset.factory import create as create_dataset
-    from nnet import predict
-    from util import visualize
-    from dataset.pose_dataset import data_to_input
+cfg = load_config("demo/pose_cfg_multi.yaml")
 
-    from multiperson.detections import extract_detections
-    from multiperson.predict import SpatialModel, eval_graph, get_person_conf_multicut
-    from multiperson.visualize import PersonDraw, visualize_detections
+dataset = create_dataset(cfg)
 
-    import matplotlib.pyplot as plt
+sm = SpatialModel(cfg)
+sm.load()
 
-    from PIL import Image, ImageDraw
+draw_multi = PersonDraw()
 
-    import random
+# Load and setup CNN part detector
+sess, inputs, outputs = predict.setup_pose_prediction(cfg)
 
-    cfg = load_config("demo/pose_cfg_multi.yaml")
+##########
+## Get the source of video
 
-    dataset = create_dataset(cfg)
+parser = ap.ArgumentParser()
+parser.add_argument('-f', "--videoFile", help="Path to Video File")
+parser.add_argument('-w', "--videoWidth", help="Width of Output Video")
+parser.add_argument('-o', "--videoType", help="Extension of Output Video")
 
-    sm = SpatialModel(cfg)
-    sm.load()
+args = vars(parser.parse_args())
 
-    # Load and setup CNN part detector
-    sess, inputs, outputs = predict.setup_pose_prediction(cfg)
+if args["videoFile"] is not None:
+    video_name = args["videoFile"]
+else:
+    print("You have to input videoFile name")
+    sys.exit(1)
+video_output_name = video_name.split('.')[0]
 
-    ################
+# Read video from file
+video_name_input = 'testset/' + video_name
+video = VideoFileClip(video_name_input)
 
-    video = read_video(video_name)
+print("Input video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
 
-    video_frame_number = int(video.duration * video.fps) ## duration: second / fps: frame per second
-    video_frame_ciphers = math.ceil(math.log(video_frame_number, 10)) ## ex. 720 -> 3
+if args["videoWidth"] is not None:
+    video_width = int(args["videoWidth"])
+    video = video.resize(width = video_width)
+print("Changed video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
 
-    if not os.path.exists('testset/' + video_name):
-        os.makedirs('testset/' + video_name)
+if args["videoType"] is not None:
+    video_type = args["videoType"]
+else:
+    video_type = "mp4"
+print("Output video type: " + video_type)
 
-    for i in range(0, video_frame_number):
-        image = video.get_frame(i/video.fps)
+##########
+## Define some functions to mark at image
 
-        ######################
+def ellipse_set(person_conf_multi, people_i, point_i):
+    return (person_conf_multi[people_i][point_i][0] - point_r, person_conf_multi[people_i][point_i][1] - point_r, person_conf_multi[people_i][point_i][0] + point_r, person_conf_multi[people_i][point_i][1] + point_r)
 
-        image_batch = data_to_input(image)
+##########
 
-        # Compute prediction with the CNN
-        outputs_np = sess.run(outputs, feed_dict={inputs: image_batch})
-        scmap, locref, pairwise_diff = predict.extract_cnn_output(outputs_np, cfg, dataset.pairwise_stats)
+video_frame_number = int(video.duration * video.fps) ## duration: second / fps: frame per second
+video_frame_ciphers = math.ceil(math.log(video_frame_number, 10)) ## ex. 720 -> 3
 
-        detections = extract_detections(cfg, scmap, locref, pairwise_diff)
-        unLab, pos_array, unary_array, pwidx_array, pw_array = eval_graph(sm, detections)
-        person_conf_multi = get_person_conf_multicut(sm, unLab, unary_array, pos_array)
+point_r = 3 # radius of points
+point_min = 14 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
+point_num = 17 # There are 17 points in 1 person
 
-        print('person_conf_multi: ')
-        print(type(person_conf_multi))
-        print(person_conf_multi)
+##########
 
-        # Add library to save image
-        image_img = Image.fromarray(image)
+for i in range(0, video_frame_number):
+    # Save i-th frame as image
+    image = video.get_frame(i/video.fps)
 
-        # Save image with points of pose
-        draw = ImageDraw.Draw(image_img)
+    ##########
+    ## By pose-tensorflow
 
-        people_num = 0
-        point_num = 17
-        print('person_conf_multi.size: ')
-        print(person_conf_multi.size)
-        people_num = person_conf_multi.size / (point_num * 2)
-        people_num = int(people_num)
-        print('people_num: ')
-        print(people_num)
+    image_batch = data_to_input(image)
 
+    # Compute prediction with the CNN
+    outputs_np = sess.run(outputs, feed_dict={inputs: image_batch})
+    scmap, locref, pairwise_diff = predict.extract_cnn_output(outputs_np, cfg, dataset.pairwise_stats)
+
+    detections = extract_detections(cfg, scmap, locref, pairwise_diff)
+    unLab, pos_array, unary_array, pwidx_array, pw_array = eval_graph(sm, detections)
+    person_conf_multi = get_person_conf_multicut(sm, unLab, unary_array, pos_array)
+
+    #####
+
+    # Add library to draw image
+    image_img = Image.fromarray(image)
+
+    # Prepare saving image with points of pose
+    draw = ImageDraw.Draw(image_img)
+
+    for people_i in range(0, people_num):
+        point_color_r = random.randrange(0, 256)
+        point_color_g = random.randrange(0, 256)
+        point_color_b = random.randrange(0, 256)
+        point_color = (point_color_r, point_color_g, point_color_b, 255)
+        point_list = []
+        point_count = 0
         point_i = 0 # index of points
-        point_r = 5 # radius of points
 
-        people_real_num = 0
-        for people_i in range(0, people_num):
-            point_color_r = random.randrange(0, 256)
-            point_color_g = random.randrange(0, 256)
-            point_color_b = random.randrange(0, 256)
-            point_color = (point_color_r, point_color_g, point_color_b, 255)
-            point_count = 0
+        # To find rectangle which include that people - list of points x, y coordinates
+        people_x = []
+        people_y = []
+
+        for point_i in range(0, point_num):
+            if person_conf_multi[people_i][point_i][0] + person_conf_multi[people_i][point_i][1] != 0: # If coordinates of point is (0, 0) == meaningless data
+                point_count = point_count + 1
+                point_list.append(point_i)
+
+        if point_count >= point_min:
+            people_real_num = people_real_num + 1
             for point_i in range(0, point_num):
                 if person_conf_multi[people_i][point_i][0] + person_conf_multi[people_i][point_i][1] != 0: # If coordinates of point is (0, 0) == meaningless data
-                    point_count = point_count + 1
-            if point_count > 5: # If there are more than 5 point in person, we define he/she is REAL PERSON
-                people_real_num = people_real_num + 1
-                for point_i in range(0, point_num):
-                    draw.ellipse((person_conf_multi[people_i][point_i][0] - point_r, person_conf_multi[people_i][point_i][1] - point_r, person_conf_multi[people_i][point_i][0] + point_r, person_conf_multi[people_i][point_i][1] + point_r), fill=point_color)
+                    draw.ellipse(ellipse_set(person_conf_multi, people_i, point_i), fill=point_color)
+                    people_x.append(person_conf_multi[people_i][point_i][0])
+                    people_y.append(person_conf_multi[people_i][point_i][1])
 
-        print('people_real_num: ')
-        print(people_real_num)
+    draw.text((0, 0), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
+    draw.text((0, 18), 'Total time required: ' + str(round(time.time() - time_start, 1)) + 'sec', (0,0,0), font=font)
 
-        video_name_result = 'testset/' + video_name + '/frame_pose_' + str(i).zfill(video_frame_ciphers) + '.jpg'
-        image_img.save(video_name_result, "JPG")
+    print('Frame: ' + str(i) + "/" + str(video_frame_number))
+    print('Time required: ' + str(round(time.time() - time_start, 1)) + 'sec')
 
+video_pose.write_videofile("testset/" + video_output_name + "_pose." + video_type, fps=video.fps, progress_bar=False)
 
-def video2posevideo(video_name):
-    time_start = time.clock()
-
-    import numpy as np
-
-    sys.path.append(os.path.dirname(__file__) + "/../")
-
-    from scipy.misc import imread, imsave
-
-    from config import load_config
-    from dataset.factory import create as create_dataset
-    from nnet import predict
-    from util import visualize
-    from dataset.pose_dataset import data_to_input
-
-    from multiperson.detections import extract_detections
-    from multiperson.predict import SpatialModel, eval_graph, get_person_conf_multicut
-    from multiperson.visualize import PersonDraw, visualize_detections
-
-    import matplotlib.pyplot as plt
-
-    from PIL import Image, ImageDraw, ImageFont
-    font = ImageFont.truetype("./font/NotoSans-Bold.ttf", 24)
-
-    import random
-
-    cfg = load_config("demo/pose_cfg_multi.yaml")
-
-    dataset = create_dataset(cfg)
-
-    sm = SpatialModel(cfg)
-    sm.load()
-
-    draw_multi = PersonDraw()
-
-    # Load and setup CNN part detector
-    sess, inputs, outputs = predict.setup_pose_prediction(cfg)
-
-    ################
-
-    video = read_video(video_name)
-
-    video_frame_number = int(video.duration * video.fps) ## duration: second / fps: frame per second
-    video_frame_ciphers = math.ceil(math.log(video_frame_number, 10)) ## ex. 720 -> 3
-
-    pose_frame_list = []
-
-    point_r = 3 # radius of points
-    point_min = 10 # threshold of points - If there are more than point_min points in person, we define he/she is REAL PERSON
-    part_min = 3 # threshold of parts - If there are more than part_min parts in person, we define he/she is REAL PERSON / part means head, arm and leg
-    point_num = 17 # There are 17 points in 1 person
-
-    def ellipse_set(person_conf_multi, people_i, point_i):
-        return (person_conf_multi[people_i][point_i][0] - point_r, person_conf_multi[people_i][point_i][1] - point_r, person_conf_multi[people_i][point_i][0] + point_r, person_conf_multi[people_i][point_i][1] + point_r)
-
-    def line_set(person_conf_multi, people_i, point_i, point_j):
-        return (person_conf_multi[people_i][point_i][0], person_conf_multi[people_i][point_i][1], person_conf_multi[people_i][point_j][0], person_conf_multi[people_i][point_j][1])
-
-    def draw_ellipse_and_line(draw, person_conf_multi, people_i, a, b, c, point_color):
-        draw.ellipse(ellipse_set(person_conf_multi, people_i, a), fill=point_color)
-        draw.ellipse(ellipse_set(person_conf_multi, people_i, b), fill=point_color)
-        draw.ellipse(ellipse_set(person_conf_multi, people_i, c), fill=point_color)
-        draw.line(line_set(person_conf_multi, people_i, a, b), fill=point_color, width=5)
-        draw.line(line_set(person_conf_multi, people_i, b, c), fill=point_color, width=5)
-
-    for i in range(0, video_frame_number):
-        image = video.get_frame(i/video.fps)
-
-        ######################
-
-        image_batch = data_to_input(image)
-
-        # Compute prediction with the CNN
-        outputs_np = sess.run(outputs, feed_dict={inputs: image_batch})
-        scmap, locref, pairwise_diff = predict.extract_cnn_output(outputs_np, cfg, dataset.pairwise_stats)
-
-        detections = extract_detections(cfg, scmap, locref, pairwise_diff)
-        unLab, pos_array, unary_array, pwidx_array, pw_array = eval_graph(sm, detections)
-        person_conf_multi = get_person_conf_multicut(sm, unLab, unary_array, pos_array)
-
-        # print('person_conf_multi: ')
-        # print(type(person_conf_multi))
-        # print(person_conf_multi)
-
-        # Add library to save image
-        image_img = Image.fromarray(image)
-
-        # Save image with points of pose
-        draw = ImageDraw.Draw(image_img)
-
-        people_num = 0
-        people_real_num = 0
-        people_part_num = 0
-
-        people_num = person_conf_multi.size / (point_num * 2)
-        people_num = int(people_num)
-        print('people_num: ' + str(people_num))
-
-        for people_i in range(0, people_num):
-            point_color_r = random.randrange(0, 256)
-            point_color_g = random.randrange(0, 256)
-            point_color_b = random.randrange(0, 256)
-            point_color = (point_color_r, point_color_g, point_color_b, 255)
-            point_list = []
-            point_count = 0
-            point_i = 0 # index of points
-            part_count = 0 # count of parts in THAT person
-
-            # To find rectangle which include that people - list of points x, y coordinates
-            people_x = []
-            people_y = []
-
-            for point_i in range(0, point_num):
-                if person_conf_multi[people_i][point_i][0] + person_conf_multi[people_i][point_i][1] != 0: # If coordinates of point is (0, 0) == meaningless data
-                    point_count = point_count + 1
-                    point_list.append(point_i)
-
-            # Draw each parts
-            if (5 in point_list) and (7 in point_list) and (9 in point_list): # Draw left arm
-                draw_ellipse_and_line(draw, person_conf_multi, people_i, 5, 7, 9, point_color)
-                part_count = part_count + 1
-            if (6 in point_list) and (8 in point_list) and (10 in point_list): # Draw right arm
-                draw_ellipse_and_line(draw, person_conf_multi, people_i, 6, 8, 10, point_color)
-                part_count = part_count + 1
-            if (11 in point_list) and (13 in point_list) and (15 in point_list): # Draw left leg
-                draw_ellipse_and_line(draw, person_conf_multi, people_i, 11, 13, 15, point_color)
-                part_count = part_count + 1
-            if (12 in point_list) and (14 in point_list) and (16 in point_list): # Draw right leg
-                draw_ellipse_and_line(draw, person_conf_multi, people_i, 12, 14, 16, point_color)
-                part_count = part_count + 1
-            if point_count >= point_min:
-                people_real_num = people_real_num + 1
-                for point_i in range(0, point_num):
-                    if person_conf_multi[people_i][point_i][0] + person_conf_multi[people_i][point_i][1] != 0: # If coordinates of point is (0, 0) == meaningless data
-                        draw.ellipse(ellipse_set(person_conf_multi, people_i, point_i), fill=point_color)
-                        people_x.append(person_conf_multi[people_i][point_i][0])
-                        people_y.append(person_conf_multi[people_i][point_i][1])
-                # Draw rectangle which include that people
-                draw.rectangle([min(people_x), min(people_y), max(people_x), max(people_y)], fill=point_color, outline=5)
-
-
-            if part_count >= part_min:
-                people_part_num = people_part_num + 1
-
-        draw.text((0, 0), 'People(by point): ' + str(people_real_num) + ' (threshold = ' + str(point_min) + ')', (0,0,0), font=font)
-        draw.text((0, 32), 'People(by line): ' + str(people_part_num) + ' (threshold = ' + str(part_min) + ')', (0,0,0), font=font)
-        draw.text((0, 64), 'Frame: ' + str(i) + '/' + str(video_frame_number), (0,0,0), font=font)
-        draw.text((0, 96), 'Total time required: ' + str(round(time.clock() - time_start, 1)) + 'sec', (0,0,0))
-
-        print('people_real_num: ' + str(people_real_num))
-        print('people_part_num: ' + str(people_part_num))
-        print('frame: ' + str(i))
-
-        image_img_numpy = np.asarray(image_img)
-
-        pose_frame_list.append(image_img_numpy)
-
-    video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
-    video_pose.write_videofile("testset/" + video_name + "_pose.mp4", fps=video.fps)
-
-    print("Time(s): " + str(time.clock() - time_start))
+print("Time(s): " + str(time.time() - time_start))
+print("Output video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
