@@ -6,7 +6,8 @@
 ## Demo
 <img src="/samples/sample_results.gif" width="600">  
 
-[Demo on YouTube](http://www.youtube.com/watch?v=5lSUhCjgD7g)
+[Demo on YouTube](http://www.youtube.com/watch?v=5lSUhCjgD7g)  
+[Paper Abstract](https://github.com/PJunhyuk/people-counting-pose/blob/master/samples/Pose%20estimation-based%20tracking%20and%20counting%20of%20people%20in%20videos.pdf)
 
 ## Usage
 
