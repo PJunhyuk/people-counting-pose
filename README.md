@@ -1,7 +1,7 @@
 <img src="/samples/Odin_squared.png" width="200">
 
 # Odin
-### People counting and classification in videos based on pose estimation
+### Pose estimation-based tracking and counting of people in videos
 
 ## Demo
 <img src="/samples/sample_results.gif" width="600">  
@@ -22,8 +22,8 @@ $ docker run -it --name odin jgravity/tensorflow-opencv:odin bin/bash
 
 #### Download/Install code
 ```
-# git clone https://github.com/PJunhyuk/people-counting-classification
-# cd people-counting-classification
+# git clone https://github.com/PJunhyuk/people-counting-pose
+# cd people-counting-pose
 # chmod u+x ./compile.sh && ./compile.sh && cd models/coco && chmod u+x download_models_wget.sh && ./download_models_wget.sh && cd -
 ```
 
@@ -31,12 +31,6 @@ $ docker run -it --name odin jgravity/tensorflow-opencv:odin bin/bash
 ```
 # cd testset && chmod u+x ./download_testset_wget.sh && ./download_testset_wget.sh && cd -
 ```
-
-#### Background removal
-```
-# python bg_removal.py -f '{video_file_name}'
-```
-> Default route is ```/people-counting-classification/testset```, and you have to drop ```testset/``` for ```{video_file_name}```
 
 #### Just get pose of people
 ```
