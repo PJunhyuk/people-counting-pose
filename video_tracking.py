@@ -70,7 +70,8 @@ else:
     print("You have to input videoFile name")
     sys.exit(1)
 video_output_name = video_name.split('.')[0]
-video = video_pose.read_video(video_name)
+video_name_input = 'testset/' + video_name
+video = VideoFileClip(video_name_input)
 print("Input video size: [" + str(video.size[0]) + ", " + str(video.size[1]) + "]")
 
 if args["videoWidth"] is not None:
