@@ -84,7 +84,7 @@ or install
 
 ## Results (time required)
 
-Check [RESULTS_time.md](https://github.com/PJunhyuk/people-counting-pose/blog/master/results_log.md)
+Check [results_log](https://github.com/PJunhyuk/people-counting-pose/blob/master/results_log.md)
 
 ## Reference
 
