@@ -11,15 +11,13 @@
 
 ## Usage
 
-Install [Docker](https://docker.com) and [Kitematic](https://kitematic.com/)
+Uses [Docker](https://docker.com)  
 
 #### Pull docker image
 ```
 $ docker pull jgravity/tensorflow-opencv:odin
 $ docker run -it --name odin jgravity/tensorflow-opencv:odin bin/bash
 ```
-
-> Use ```nvidia-docker``` instead of ```docker``` to use GPU
 
 #### Download/Install code
 ```
@@ -33,22 +31,33 @@ $ docker run -it --name odin jgravity/tensorflow-opencv:odin bin/bash
 # cd testset && chmod u+x ./download_testset_wget.sh && ./download_testset_wget.sh && cd -
 ```
 
-#### Just get pose of people
-```
-# python video_pose.py -f '{video_file_name}'
-```
-> Qualified supporting video type: mov, mp4
-
 #### Tracking people
 ```
 # python video_tracking.py -f '{video_file_name}'
 ```
-> Qualified supporting video type: mov, mp4
+> Qualified supporting video type: mov, mp4  
+> You have to put target video file in ./testset folder  
 
 ###### Arguments
 > -f, --videoFile = Path to Video File  
 > -w, --videoWidth = Width of Output Video  
 > -o, --videoType = Extension of Output Video
+
+###### Example
+```
+# python video_tracking.py -f 'test_video_01f.mov'
+```
+
+#### Check results
+```
+> docker cp odin:/people-counting-pose/testset/{video_file_name} ./
+```
+
+#### Just get pose of people (without tracking)
+```
+# python video_pose.py -f '{video_file_name}'
+```
+> Qualified supporting video type: mov, mp4
 
 ## Dependencies
 
@@ -72,6 +81,10 @@ or install
   - moviepy 0.2.3.2
   - dlib 19.7.0
   - imageio 2.1.2
+
+## Results (time required)
+
+Check [RESULTS_time.md](https://github.com/PJunhyuk/people-counting-pose/blog/master/results_log.md)
 
 ## Reference
 
