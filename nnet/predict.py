@@ -16,6 +16,7 @@ def setup_pose_prediction(cfg):
 
     sess.run(tf.global_variables_initializer())
     sess.run(tf.local_variables_initializer())
+    sess.run(tf.reset_default_graph())
 
     # Restore variables from disk.
     restorer.restore(sess, cfg.init_weights)
