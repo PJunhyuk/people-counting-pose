@@ -38,7 +38,7 @@ import random
 # for object-tracker
 import dlib
 
-import video_pose
+# import video_pose
 
 ####################
 
@@ -233,11 +233,11 @@ for i in range(0, video_frame_number):
 
     pose_frame_list.append(image_img_numpy)
 
-    if not (os.path.isdir("testset/" + video_output_name)):
-        os.mkdir("testset/" + video_output_name)
-    image_name = "testset/" + video_output_name + "/" + str(i).zfill(10) + "_" + str(int(video.fps)) + "_" + str(len(tracker)) + ".jpg"
-    print(image_name)
-    image_img.save(image_name)
+    # if not (os.path.isdir("testset/" + video_output_name)):
+    #     os.mkdir("testset/" + video_output_name)
+    # image_name = "testset/" + video_output_name + "/" + str(i).zfill(10) + "_" + str(int(video.fps)) + "_" + str(len(tracker)) + ".jpg"
+    # print(image_name)
+    # image_img.save(image_name)
 
 video_pose = ImageSequenceClip(pose_frame_list, fps=video.fps)
 video_pose.write_videofile("testset/" + video_output_name + "_tracking." + video_type, fps=video.fps, progress_bar=False)
