@@ -6,7 +6,7 @@ from nnet.net_factory import pose_net
 
 
 def setup_pose_prediction(cfg):
-    sess.run(tf.reset_default_graph())
+    tf.reset_default_graph()
 
     inputs = tf.placeholder(tf.float32, shape=[cfg.batch_size, None, None, 3])
 
