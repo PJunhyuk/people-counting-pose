@@ -6,6 +6,8 @@ from nnet.net_factory import pose_net
 
 
 def setup_pose_prediction(cfg):
+    sess.run(tf.reset_default_graph())
+
     inputs = tf.placeholder(tf.float32, shape=[cfg.batch_size, None, None, 3])
 
     outputs = pose_net(cfg).test(inputs)
@@ -16,7 +18,6 @@ def setup_pose_prediction(cfg):
 
     sess.run(tf.global_variables_initializer())
     sess.run(tf.local_variables_initializer())
-    sess.run(tf.reset_default_graph())
 
     # Restore variables from disk.
     restorer.restore(sess, cfg.init_weights)
