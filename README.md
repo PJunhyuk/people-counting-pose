@@ -110,3 +110,6 @@ Check [results_log](https://github.com/PJunhyuk/people-counting-pose/blob/master
 ### Code
 [pose-tensorflow](https://github.com/eldar/pose-tensorflow) - Human Pose estimation with TensorFlow framework  
 [object-tracker](https://github.com/bikz05/object-tracker) - Object Tracker written in Python using dlib and OpenCV
+
+## LICENCE
+[Apache License 2.0](https://github.com/PJunhyuk/people-counting-pose/blob/master/LICENSE)
